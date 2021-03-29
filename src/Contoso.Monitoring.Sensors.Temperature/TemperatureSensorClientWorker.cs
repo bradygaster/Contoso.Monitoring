@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Contoso.Monitoring.Grains.Interfaces;
+using Contoso.Monitoring.Sensors.Temperature.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Orleans;
@@ -13,16 +14,15 @@ namespace Contoso.Monitoring.Sensors.Temperature
     public class TemperatureSensorClientWorker : BackgroundService
     {
         private readonly ILogger<TemperatureSensorClientWorker> _logger;
-        private readonly string _randomSensorName;
+        private readonly ITemperatureSensorClient _temperatureSensorClient;
         private ITemperatureSensorGrain _grain;
-
         public IClusterClient Client { get; }
 
-        public TemperatureSensorClientWorker(ILogger<TemperatureSensorClientWorker> logger)
+        public TemperatureSensorClientWorker(ILogger<TemperatureSensorClientWorker> logger,
+            ITemperatureSensorClient temperatureSensorClient)
         {
             _logger = logger;
-            _randomSensorName = System.IO.Path.GetFileNameWithoutExtension(System.IO.Path.GetRandomFileName());
-
+            _temperatureSensorClient = temperatureSensorClient;
             try
             {
                 Client = new ClientBuilder()
@@ -82,16 +82,9 @@ namespace Contoso.Monitoring.Sensors.Temperature
             {
                 try
                 {
-                    _grain ??= Client.GetGrain<ITemperatureSensorGrain>(_randomSensorName);
-
-                    var fakeTempInF = 67; 
-
-                    await _grain.ReceiveTemperatureReading(new TemperatureReading
-                    {
-                        SensorName = _randomSensorName,
-                        Fahrenheit = fakeTempInF,
-                        Celsius = TemperatureReadingConverter.ToCelsius(fakeTempInF)
-                    });
+                    var reading = await _temperatureSensorClient.GetTemperatureReading();
+                    _grain ??= Client.GetGrain<ITemperatureSensorGrain>(reading.SensorName);
+                    await _grain.ReceiveTemperatureReading(reading);
                 }
                 catch(Exception ex)
                 {

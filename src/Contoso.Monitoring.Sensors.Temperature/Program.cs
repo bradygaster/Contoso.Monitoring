@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contoso.Monitoring.Sensors.Temperature.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Orleans;
@@ -21,6 +22,7 @@ namespace Contoso.Monitoring.Sensors.Temperature
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddSingleton<ITemperatureSensorClient, FakeTemperatureSensorClient>();
                     services.AddHostedService<TemperatureSensorClientWorker>();
                 });
     }
