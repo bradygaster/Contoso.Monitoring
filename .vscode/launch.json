@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Sensor Silo",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/Contoso.Monitoring.Sensors.Silo/bin/Debug/net5.0/Contoso.Monitoring.Sensors.Silo.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/Contoso.Monitoring.Sensors.Silo/",
+            "stopAtEntry": false,
+            "launchBrowser": {
+                "enabled": true,
+                "osx": {
+                    "command": "open",
+                    "args": "http://localhost:8080"
+                }
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickProcess}"
+        }
+    ]
+}

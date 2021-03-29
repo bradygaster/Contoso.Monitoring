@@ -1,0 +1,11 @@
+﻿{
+  "profiles": {
+    "Contoso.Monitoring.Sensors.Temperature": {
+      "commandName": "Project",
+      "dotnetRunMessages": "true",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
