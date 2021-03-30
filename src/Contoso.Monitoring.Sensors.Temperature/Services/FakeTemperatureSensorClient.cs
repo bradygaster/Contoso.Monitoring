@@ -10,7 +10,10 @@ namespace Contoso.Monitoring.Sensors.Temperature.Services
 
         public FakeTemperatureSensorClient()
         {
-            _randomSensorName = string.Concat(new Random().Next(1,10), new Random().Next(1,50));
+            _randomSensorName = string.Concat(
+                new Random().Next(1, 4).ToString(), 
+                new Random().Next(1, 11).ToString().PadLeft(2, '0')
+            );
         }
 
         public Task<TemperatureReading> GetTemperatureReading()
