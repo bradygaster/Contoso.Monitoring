@@ -15,7 +15,9 @@ namespace Contoso.Monitoring.Sensors.Temperature
     {
         private readonly ILogger<TemperatureSensorClientWorker> _logger;
         private readonly ITemperatureSensorClient _temperatureSensorClient;
-        private ITemperatureSensorGrain _grain;
+        private ITemperatureSensorGrain _temperatureSensorGrain;
+        private IMonitoredBuildingGrain _monitoredBuildingGrain;
+
         public IClusterClient Client { get; }
 
         public TemperatureSensorClientWorker(ILogger<TemperatureSensorClientWorker> logger,
@@ -83,9 +85,16 @@ namespace Contoso.Monitoring.Sensors.Temperature
             {
                 try
                 {
+                    // get the temperature
                     var reading = await _temperatureSensorClient.GetTemperatureReading();
-                    _grain ??= Client.GetGrain<ITemperatureSensorGrain>(reading.SensorName);
-                    await _grain.ReceiveTemperatureReading(reading);
+
+                    // get the temp sensor grain
+                    _temperatureSensorGrain ??= Client.GetGrain<ITemperatureSensorGrain>(reading.SensorName);
+                    await _temperatureSensorGrain.ReceiveTemperatureReading(reading);
+
+                    // get the monitored building grain
+                    _monitoredBuildingGrain ??= Client.GetGrain<IMonitoredBuildingGrain>(Guid.Empty);
+                    await _monitoredBuildingGrain.MonitorArea(reading.SensorName);
                 }
                 catch(Exception ex)
                 {

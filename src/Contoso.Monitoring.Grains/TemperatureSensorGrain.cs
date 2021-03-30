@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Contoso.Monitoring.Grains.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -18,6 +19,16 @@ namespace Contoso.Monitoring.Grains
         {
             _logger = logger;
             _temperatureSensorGrainState = temperatureSensorGrainState;
+        }
+
+        public Task<TemperatureReading> GetTemperature()
+        {
+            if(_temperatureSensorGrainState.State.Readings.Any())
+            {
+                return Task.FromResult(_temperatureSensorGrainState.State.Readings.Last());
+            }
+
+            return null;
         }
 
         public Task ReceiveTemperatureReading(TemperatureReading temperatureReading)

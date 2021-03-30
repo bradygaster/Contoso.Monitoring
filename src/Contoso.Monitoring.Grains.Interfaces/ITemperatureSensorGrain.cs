@@ -5,5 +5,6 @@ namespace Contoso.Monitoring.Grains.Interfaces
     public interface ITemperatureSensorGrain : Orleans.IGrainWithStringKey
     {
         Task ReceiveTemperatureReading(TemperatureReading temperatureReading);
+        Task<TemperatureReading> GetTemperature();
     }
 }
