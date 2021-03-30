@@ -46,8 +46,8 @@ namespace Contoso.Monitoring.Grains
             };
         }
 
-        public Task<IEnumerable<string>> GetMonitoredAreaNames() => 
-            Task.FromResult(_monitoredBuildingGrainState.State.MonitoredAreaNames.OrderBy(_ => _).AsEnumerable());
+        public Task<List<string>> GetMonitoredAreaNames() => 
+            Task.FromResult(_monitoredBuildingGrainState.State.MonitoredAreaNames);
     }
 
     [Serializable]

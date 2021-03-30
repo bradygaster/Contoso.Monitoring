@@ -1,7 +1,38 @@
 @page "/"
+@using Grains.Interfaces
+@inject ContosoMonitoringClientService _contosoMonitoringClientService;
 
-<h1>Hello, world!</h1>
+<h1>Monitored Areas</h1>
 
-Welcome to your new app.
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Temperature (Fahrenheit)</th>
+        <th>Temperature (Celsius)</th>
+    </tr>
+    @foreach (var area in AreaNames.Keys)
+    {
+        <tr>
+            <td>@area</td>
+            <td>@AreaNames[area].Temperature.Fahrenheit</td>
+            <td>@AreaNames[area].Temperature.Celsius</td>
+        </tr>
+    }
+</table>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code
+{
+    private Dictionary<string, MonitoredArea> AreaNames = new Dictionary<string, MonitoredArea>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var grain = _contosoMonitoringClientService.Client.GetGrain<IMonitoredBuildingGrain>(Guid.Empty);
+        var areas = await grain.GetMonitoredAreaNames();
+        AreaNames.Clear();
+
+        foreach (var area in areas)
+        {
+            AreaNames.Add(area, await grain.GetMonitoredArea(area));
+        }
+    }
+}
