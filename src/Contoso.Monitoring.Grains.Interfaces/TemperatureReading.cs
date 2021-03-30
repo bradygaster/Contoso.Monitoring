@@ -8,6 +8,7 @@ namespace Contoso.Monitoring.Grains.Interfaces
         public string SensorName { get; set; }
         public double Fahrenheit { get; set; }
         public double Celsius { get; set; }
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
     }
 
     public static class TemperatureReadingConverter

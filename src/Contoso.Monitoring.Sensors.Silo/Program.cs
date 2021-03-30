@@ -23,6 +23,7 @@ namespace Contoso.Monitoring.Sensors.Silo
                 .UseOrleans(siloBuilder =>
                 {
                     siloBuilder
+                        .AddMemoryGrainStorage(name: "contosoMonitoringStore")
                         .Configure<ClusterOptions>(options =>
                             {
                                 options.ClusterId = "dev";
@@ -39,7 +40,6 @@ namespace Contoso.Monitoring.Sensors.Silo
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddHostedService<Worker>();
                 });
     }
 }

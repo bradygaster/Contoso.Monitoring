@@ -23,6 +23,7 @@ namespace Contoso.Monitoring.Sensors.Temperature
         {
             _logger = logger;
             _temperatureSensorClient = temperatureSensorClient;
+            
             try
             {
                 Client = new ClientBuilder()
@@ -90,7 +91,6 @@ namespace Contoso.Monitoring.Sensors.Temperature
                 {
                     _logger.LogError(ex, "Error getting grain.");
                 }
-                
 
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 await Task.Delay(5000, stoppingToken);
