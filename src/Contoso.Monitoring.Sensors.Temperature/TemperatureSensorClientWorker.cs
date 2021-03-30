@@ -14,69 +14,30 @@ namespace Contoso.Monitoring.Sensors.Temperature
     public class TemperatureSensorClientWorker : BackgroundService
     {
         private readonly ILogger<TemperatureSensorClientWorker> _logger;
+        private readonly ContosoMonitoringClientService _clusterService;
         private readonly ITemperatureSensorClient _temperatureSensorClient;
         private ITemperatureSensorGrain _temperatureSensorGrain;
         private IMonitoredBuildingGrain _monitoredBuildingGrain;
 
-        public IClusterClient Client { get; }
-
         public TemperatureSensorClientWorker(ILogger<TemperatureSensorClientWorker> logger,
+            ContosoMonitoringClientService clusterService,
             ITemperatureSensorClient temperatureSensorClient)
         {
             _logger = logger;
+            _clusterService = clusterService;
             _temperatureSensorClient = temperatureSensorClient;
-            
-            try
-            {
-                Client = new ClientBuilder()
-                                .UseLocalhostClustering()
-                                .Build();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error connecting to cluster");
-                throw;
-            }
         }
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-             _logger.LogInformation("Connecting...");
-
-            var retries = 100;
-            await Client.Connect(async error =>
-            {
-                if (--retries < 0)
-                {
-                    _logger.LogError("Could not connect to the cluster: {@Message}", error.Message);
-                    return false;
-                }
-                else
-                {
-                    _logger.LogWarning(error, "Error Connecting: {@Message}", error.Message);
-                }
-
-                try
-                {
-                    await Task.Delay(1000, cancellationToken);
-                }
-                catch (OperationCanceledException)
-                {
-                    return false;
-                }
-
-                return true;
-            });
-
+            _logger.LogInformation("Connecting...");
+            await _clusterService.Connect(cancellationToken);
             _logger.LogInformation("Connected.");
             await base.StartAsync(cancellationToken);
         }
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            var cancellation = new TaskCompletionSource<bool>();
-            cancellationToken.Register(() => cancellation.TrySetCanceled(cancellationToken));
-
-            return Task.WhenAny(Client.Close(), cancellation.Task);
+            return Task.FromResult(_clusterService.Stop(cancellationToken));
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -89,14 +50,14 @@ namespace Contoso.Monitoring.Sensors.Temperature
                     var reading = await _temperatureSensorClient.GetTemperatureReading();
 
                     // get the temp sensor grain
-                    _temperatureSensorGrain ??= Client.GetGrain<ITemperatureSensorGrain>(reading.SensorName);
+                    _temperatureSensorGrain ??= _clusterService.Client.GetGrain<ITemperatureSensorGrain>(reading.SensorName);
                     await _temperatureSensorGrain.ReceiveTemperatureReading(reading);
 
                     // get the monitored building grain
-                    _monitoredBuildingGrain ??= Client.GetGrain<IMonitoredBuildingGrain>(Guid.Empty);
+                    _monitoredBuildingGrain ??= _clusterService.Client.GetGrain<IMonitoredBuildingGrain>(Guid.Empty);
                     await _monitoredBuildingGrain.MonitorArea(reading.SensorName);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error getting grain.");
                 }

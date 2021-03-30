@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Contoso.Monitoring.Grains.Interfaces\Contoso.Monitoring.Grains.Interfaces.csproj" />
+        <ProjectReference Include="..\Contoso.Monitoring.Grains\Contoso.Monitoring.Grains.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.4.1">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Orleans.OrleansProviders" Version="3.4.1" />
+    </ItemGroup>
+
+</Project>

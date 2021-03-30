@@ -22,6 +22,7 @@ namespace Contoso.Monitoring.Sensors.Temperature
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddSingleton<ContosoMonitoringClientService>();
                     services.AddSingleton<ITemperatureSensorClient, FakeTemperatureSensorClient>();
                     services.AddHostedService<TemperatureSensorClientWorker>();
                 });
