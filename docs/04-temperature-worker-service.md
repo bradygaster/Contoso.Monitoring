@@ -44,4 +44,4 @@ public class FakeTemperatureSensorClient : ITemperatureSensorClient
 
 Ready to get the app up and running? In the next step you'll clone the project and get it running locally.
 
-[Go to Phase 3](docs/03-clone-repo-and-run-silo.md)
+[Go to Phase 3](03-clone-repo-and-run-silo.md)

@@ -44,4 +44,4 @@ await Host
 
 Now that you have the Orleans Silo hosted in a .NET Core Generic Host, you'll use an Orleans client to connect to the Silo from another Generic Host.
 
-[Go to Phase 4](docs/04-temperature-worker-service.md)
+[Go to Phase 4](04-temperature-worker-service.md)
