@@ -23,7 +23,4 @@ await Host.CreateDefaultBuilder(args)
         });
 
         siloBuilder.UseDashboard();
-    })
-    .ConfigureServices((hostContext, services) =>
-    {
     }).RunConsoleAsync();

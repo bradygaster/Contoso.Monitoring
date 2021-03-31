@@ -18,120 +18,17 @@ Clone (or download) the contents of this repository. Please clone the `main` bra
 
 ## Goals
 
-You will complete the following goals in this tutorial:
+You will complete the following tasks in this tutorial:
 
 1. Get the Contoso Monitoring application server cluster running locally.
-2. Use the Orleans Dashboard to see how your Temperature worker instance(s) are creating and using Grains.
-3. Add code to the ASP.NET Core Blazor dashboard to show the status of the temperature sensors in a web-based dashboard.
+1. Get the Contoso Monitoring temperature sensor worker service running locally.
+1. Use the Orleans Dashboard to see how your temperature sensor worker instance(s) are creating and using Grains.
+1. Add code to the ASP.NET Core Blazor dashboard to show the status of the temperature sensors in a web-based dashboard.
 
-## 
+---
 
-## Microsoft Orleans Grains
+## Next Steps
 
-The main distributed services used to transmit data are Microsoft Orleans Grains. You can think of a Grain as a "cloud native object," that has a variety of capabilities. One example is the `ITemperatureSensorGrain` interface, which is in the `Contoso.Monitoring.Grains.Interfaces` project.
+Next, you'll learn about the Contoso Monitoring app's components to get some context for when you dive in to start making changes.
 
-```csharp
-namespace Contoso.Monitoring.Grains.Interfaces
-{
-    public interface ITemperatureSensorGrain : Orleans.IGrainWithStringKey
-    {
-        Task ReceiveTemperatureReading(TemperatureReading temperatureReading);
-        Task<TemperatureReading> GetTemperature();
-    }
-}
-```
-
-The interface is implemented via the `TemperatureSensorGrain` class. Each `TemperatureSensorGrain` instance can be thought of as a digital twin of a physical temperature sensor. Each instance can save its own state. 
-
-```csharp
-namespace Contoso.Monitoring.Grains
-{
-    public class TemperatureSensorGrain : Orleans.Grain, ITemperatureSensorGrain
-    {
-        private IPersistentState<TemperatureSensorGrainState> _temperatureSensorGrainState;
-
-        public Task<TemperatureReading> GetTemperature()
-        {
-            if(_temperatureSensorGrainState.State.Readings.Any())
-            {
-                return Task.FromResult(_temperatureSensorGrainState.State.Readings.Last());
-            }
-
-            return null;
-        }
-
-        public Task ReceiveTemperatureReading(TemperatureReading temperatureReading)
-        {
-            _temperatureSensorGrainState.State.Readings.Add(temperatureReading);
-            
-            return Task.FromResult(true);
-        }
-    }
-}
-```
-
-### Persisting state and data
-
-To store data and state specific to the temperature sensor, each `TemperatureSensorGrain` uses an `TemperatureSensorGrainState` instance stored in Orleans persistent state store.
-
-```csharp
-[Serializable]
-public class TemperatureSensorGrainState
-{
-    public List<TemperatureReading> Readings { get; set; } = new List<TemperatureReading>();
-}
-```
-
-The `TemperatureSensorGrainState` model is created using the Orleans `IPersistentState<T>` object; in our case, an instance of `IPersistentState<TemperatureSensorGrainState>` is passed to the `TemperatureSensorGrain` constructor. 
-
-```csharp
-public TemperatureSensorGrain(ILogger<TemperatureSensorGrain> logger,
-    [PersistentState("temperatureSensorGrainState", "contosoMonitoringStore")] 
-    IPersistentState<TemperatureSensorGrainState> temperatureSensorGrainState)
-{
-    _logger = logger;
-    _temperatureSensorGrainState = temperatureSensorGrainState;
-}
-```
-
-With this code in place, the 
-
-## The Temperature Sensor worker service 
-
-Devices hosting the temperature sensor app, a .NET Core worker service project, implement the `ITemperatureSensorClient` interface to add code specific to whatever type of temperature-sensing behavior the host device supports.
-
-```csharp
-namespace Contoso.Monitoring.Sensors.Temperature.Services
-{
-    public interface ITemperatureSensorClient
-    {
-        Task<TemperatureReading> GetTemperatureReading();
-    }
-}
-```
-
-The job of this interface is to give the `TemperatureSensorClientWorker` class a way to get the temperature from a wide variety of host devices or platforms. Implemented by the `FakeTemperatureSensorClient` class, the current implementation generates fake temperature readings that are sent to the `ITemperatureSensorGrain` running in the Microsoft Orleans silo.
-
-```csharp
-public class FakeTemperatureSensorClient : ITemperatureSensorClient
-{
-    private string _randomSensorName;
-
-    public FakeTemperatureSensorClient()
-    {
-        _randomSensorName = string.Concat(new Random().Next(1,10), new Random().Next(1,50));
-    }
-
-    public Task<TemperatureReading> GetTemperatureReading()
-    {
-        var fakeTempInF = new Random().Next(60, 80); 
-
-        return Task.FromResult(new TemperatureReading
-        {
-            SensorName = _randomSensorName,
-            Fahrenheit = fakeTempInF,
-            Celsius = TemperatureReadingConverter.ToCelsius(fakeTempInF)
-        });
-    }
-}
-```
+[Go to Phase 2](docs/02-orleans-grains.md)
