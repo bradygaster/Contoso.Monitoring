@@ -24,9 +24,11 @@ You will complete the following goals in this tutorial:
 2. Use the Orleans Dashboard to see how your Temperature worker instance(s) are creating and using Grains.
 3. Add code to the ASP.NET Core Blazor dashboard to show the status of the temperature sensors in a web-based dashboard.
 
-## Orleans Grains
+## 
 
-The main distributed services used to transmit data are Microsoft Orleans Grains. One example is the `ITemperatureSensorGrain` interface, which is in the `Contoso.Monitoring.Grains.Interfaces` project.
+## Microsoft Orleans Grains
+
+The main distributed services used to transmit data are Microsoft Orleans Grains. You can think of a Grain as a "cloud native object," that has a variety of capabilities. One example is the `ITemperatureSensorGrain` interface, which is in the `Contoso.Monitoring.Grains.Interfaces` project.
 
 ```csharp
 namespace Contoso.Monitoring.Grains.Interfaces
@@ -34,29 +36,65 @@ namespace Contoso.Monitoring.Grains.Interfaces
     public interface ITemperatureSensorGrain : Orleans.IGrainWithStringKey
     {
         Task ReceiveTemperatureReading(TemperatureReading temperatureReading);
+        Task<TemperatureReading> GetTemperature();
     }
 }
 ```
 
-The interface is implemented via the `TemperatureSensorGrain` class. There isn't much implementation yet, as we're just the stage of getting the topology constructed so that any variety of sensor clients can be added at any time without impacting any of the other clients or back-end systems that work as sensor data is received.
+The interface is implemented via the `TemperatureSensorGrain` class. Each `TemperatureSensorGrain` instance can be thought of as a digital twin of a physical temperature sensor. Each instance can save its own state. 
 
 ```csharp
-public class TemperatureSensorGrain : Orleans.Grain, ITemperatureSensorGrain
+namespace Contoso.Monitoring.Grains
 {
-    public TemperatureSensorGrain(ILogger<TemperatureSensorGrain> logger)
+    public class TemperatureSensorGrain : Orleans.Grain, ITemperatureSensorGrain
     {
-        this.Logger = logger;
-    }
+        private IPersistentState<TemperatureSensorGrainState> _temperatureSensorGrainState;
 
-    public ILogger<TemperatureSensorGrain> Logger { get; }
+        public Task<TemperatureReading> GetTemperature()
+        {
+            if(_temperatureSensorGrainState.State.Readings.Any())
+            {
+                return Task.FromResult(_temperatureSensorGrainState.State.Readings.Last());
+            }
 
-    public Task ReceiveTemperatureReading(TemperatureReading temperatureReading)
-    {
-        Logger.LogInformation($"Received {temperatureReading.Fahrenheit} from client {temperatureReading.SensorName} at {DateTime.UtcNow}.");
-        return Task.FromResult(true);
+            return null;
+        }
+
+        public Task ReceiveTemperatureReading(TemperatureReading temperatureReading)
+        {
+            _temperatureSensorGrainState.State.Readings.Add(temperatureReading);
+            
+            return Task.FromResult(true);
+        }
     }
 }
 ```
+
+### Persisting state and data
+
+To store data and state specific to the temperature sensor, each `TemperatureSensorGrain` uses an `TemperatureSensorGrainState` instance stored in Orleans persistent state store.
+
+```csharp
+[Serializable]
+public class TemperatureSensorGrainState
+{
+    public List<TemperatureReading> Readings { get; set; } = new List<TemperatureReading>();
+}
+```
+
+The `TemperatureSensorGrainState` model is created using the Orleans `IPersistentState<T>` object; in our case, an instance of `IPersistentState<TemperatureSensorGrainState>` is passed to the `TemperatureSensorGrain` constructor. 
+
+```csharp
+public TemperatureSensorGrain(ILogger<TemperatureSensorGrain> logger,
+    [PersistentState("temperatureSensorGrainState", "contosoMonitoringStore")] 
+    IPersistentState<TemperatureSensorGrainState> temperatureSensorGrainState)
+{
+    _logger = logger;
+    _temperatureSensorGrainState = temperatureSensorGrainState;
+}
+```
+
+With this code in place, the 
 
 ## The Temperature Sensor worker service 
 

@@ -10,29 +10,29 @@
         <th>Temperature (Fahrenheit)</th>
         <th>Temperature (Celsius)</th>
     </tr>
-    @foreach (var area in AreaNames.Keys)
+    @foreach (var area in _areas)
     {
         <tr>
-            <td>@area</td>
-            <td>@AreaNames[area].Temperature.Fahrenheit</td>
-            <td>@AreaNames[area].Temperature.Celsius</td>
+            <td>@area.Name</td>
+            <td>@area.Temperature.Fahrenheit.ToString("#.##")</td>
+            <td>@area.Temperature.Celsius.ToString("#.##")</td>
         </tr>
     }
 </table>
 
 @code
 {
-    private Dictionary<string, MonitoredArea> AreaNames = new Dictionary<string, MonitoredArea>();
+    private List<MonitoredArea> _areas = new List<MonitoredArea>();
 
     protected override async Task OnInitializedAsync()
     {
         var grain = _contosoMonitoringClientService.Client.GetGrain<IMonitoredBuildingGrain>(Guid.Empty);
-        var areas = await grain.GetMonitoredAreaNames();
-        AreaNames.Clear();
+        var areas = await grain.GetMonitoredAreas();
+        _areas.Clear();
 
         foreach (var area in areas)
         {
-            AreaNames.Add(area, await grain.GetMonitoredArea(area));
+            _areas.Add(area);
         }
     }
 }

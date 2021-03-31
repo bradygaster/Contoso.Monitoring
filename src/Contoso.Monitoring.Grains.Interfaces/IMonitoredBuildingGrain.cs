@@ -7,7 +7,7 @@ namespace Contoso.Monitoring.Grains.Interfaces
     {
         Task<MonitoredArea> GetMonitoredArea(string areaName);
         Task MonitorArea(string areaName);
-        Task<List<string>> GetMonitoredAreaNames();
+        Task<List<MonitoredArea>> GetMonitoredAreas();
     }
 
     public class MonitoredArea

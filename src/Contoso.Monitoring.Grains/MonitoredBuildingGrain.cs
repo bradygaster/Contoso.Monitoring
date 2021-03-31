@@ -38,16 +38,24 @@ namespace Contoso.Monitoring.Grains
         }
         public async Task<MonitoredArea> GetMonitoredArea(string areaName)
         {
-            _temperatureSensorGrain ??= _grainFactory.GetGrain<ITemperatureSensorGrain>(areaName);
-
             return new MonitoredArea
             {
-                Temperature = await _temperatureSensorGrain.GetTemperature()
+                Name = areaName,
+                Temperature = await _grainFactory.GetGrain<ITemperatureSensorGrain>(areaName).GetTemperature()
             };
         }
 
-        public Task<List<string>> GetMonitoredAreaNames() => 
-            Task.FromResult(_monitoredBuildingGrainState.State.MonitoredAreaNames);
+        public async Task<List<MonitoredArea>> GetMonitoredAreas()
+        {
+            var result = new List<MonitoredArea>();
+
+            foreach (var area in _monitoredBuildingGrainState.State.MonitoredAreaNames)
+            {
+                result.Add(await GetMonitoredArea(area));
+            }
+
+            return result;
+        }
     }
 
     [Serializable]
