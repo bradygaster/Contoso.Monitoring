@@ -29,6 +29,6 @@ You will complete the following tasks in this tutorial:
 
 ## Next Steps
 
-Next, you'll learn about the Contoso Monitoring app's components to get some context for when you dive in to start making changes.
+Next, you'll learn about components of the Contoso Monitoring system. You'll also learn about a few Microsoft Orleans concepts to get some context on the exercises you'll complete later. 
 
 [Go to Phase 2](docs/02-orleans-grains.md)
