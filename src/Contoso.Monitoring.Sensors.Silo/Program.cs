@@ -17,10 +17,9 @@ await Host.CreateDefaultBuilder(args)
                 })
             .UseLocalhostClustering();
 
-        siloBuilder.ConfigureApplicationParts(appParts => 
-        {
-            appParts.AddApplicationPart(typeof(TemperatureSensorGrain).Assembly).WithReferences();
-        });
-
-        siloBuilder.UseDashboard();
+        siloBuilder
+            .ConfigureApplicationParts(appParts => 
+                appParts.AddApplicationPart(typeof(TemperatureSensorGrain).Assembly).WithReferences())
+            .UseDashboard();
+            
     }).RunConsoleAsync();

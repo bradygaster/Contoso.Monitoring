@@ -1,6 +1,14 @@
-# Microsoft Orleans Grains
+# Microsoft Orleans 
 
-The main distributed services used in Contoso Monitoring to transmit data are Microsoft Orleans Grains. You can think of a Grain as a "cloud native object," that has a variety of capabilities. One example is the `ITemperatureSensorGrain` interface, which is in the `Contoso.Monitoring.Grains.Interfaces` project.
+Orleans builds on the developer productivity of .NET and brings it to the world of distributed applications, such as cloud services. Orleans scales from a single on-premises server to globally distributed, highly-available applications in the cloud.
+
+Orleans takes familiar concepts like objects, interfaces, async/await, and try/catch and extends them to multi-server environments. As such, it helps developers experienced with single-server applications transition to building resilient, scalable cloud services and other distributed applications. For this reason, Orleans has often been referred to as "Distributed .NET".
+
+## Orleans Grains
+
+The fundamental building block in any Orleans application is a grain. Grains are entities comprising user-defined identity, behavior, and state. Grain identities are user-defined keys which make Grains always available for invocation. Grains can be invoked by other grains or by external clients such as Web frontends, via strongly-typed communication interfaces (contracts). Each grain is an instance of a class which implements one or more of these interfaces.
+
+One example is the `ITemperatureSensorGrain` interface, which is in the `Contoso.Monitoring.Grains.Interfaces` project.
 
 ```csharp
 namespace Contoso.Monitoring.Grains.Interfaces
