@@ -6,7 +6,7 @@ using Contoso.Monitoring.Grains.Interfaces;
 using Microsoft.Extensions.Logging;
 using Orleans;
 
-namespace Contoso.Monitoring.Web
+namespace Contoso.Monitoring
 {
     public class ContosoMonitoringClientService
     {
@@ -64,7 +64,6 @@ namespace Contoso.Monitoring.Web
             });
         }
 
-        // code added to copy of file in web project
         internal async Task<List<MonitoredArea>> GetMonitoredAreas()
         {
             return (await Client.GetGrain<IMonitoredBuildingGrain>(Guid.Empty).GetMonitoredAreas());

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Orleans;
 
-namespace Contoso.Monitoring.Sensors.Temperature
+namespace Contoso.Monitoring
 {
     public class ContosoMonitoringClientService
     {
