@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Contoso.Monitoring.Grains.Interfaces;
 using Microsoft.Extensions.Logging;
 using Orleans;
 
@@ -60,6 +62,12 @@ namespace Contoso.Monitoring.Web
 
                 return true;
             });
+        }
+
+        // code added to copy of file in web project
+        internal async Task<List<MonitoredArea>> GetMonitoredAreas()
+        {
+            return (await Client.GetGrain<IMonitoredBuildingGrain>(Guid.Empty).GetMonitoredAreas());
         }
     }
 }

@@ -17,8 +17,8 @@
     {
         <tr>
             <td>@area.Name</td>
-            <td>@area.Temperature.Fahrenheit.ToString("#.##")</td>
-            <td>@area.Temperature.Celsius.ToString("#.##")</td>
+            <td>@area.Temperature.Fahrenheit.ToString("#")</td>
+            <td>@area.Temperature.Celsius.ToString("#")</td>
         </tr>
     }
     </tbody>
@@ -30,13 +30,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var grain = _contosoMonitoringClientService.Client.GetGrain<IMonitoredBuildingGrain>(Guid.Empty);
-        var areas = await grain.GetMonitoredAreas();
-        _areas.Clear();
-
-        foreach (var area in areas)
-        {
-            _areas.Add(area);
-        }
+        _areas = await _contosoMonitoringClientService.GetMonitoredAreas();
     }
 }
