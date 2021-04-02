@@ -66,7 +66,9 @@ namespace Contoso.Monitoring
 
         internal async Task<List<MonitoredArea>> GetMonitoredAreas()
         {
-            return (await Client.GetGrain<IMonitoredBuildingGrain>(Guid.Empty).GetMonitoredAreas());
+            return (await 
+                Client.GetGrain<IMonitoredBuildingGrain>(Guid.Empty)
+                    .GetMonitoredAreas());
         }
     }
 }
