@@ -1,6 +1,6 @@
 # Run the Blazor Web App
 
-One of the projects is a web-based table showing the various temperature sensors and their latest values. This ASP.NET Core Blazor project is named `Contoso.Monitoring.Web`. There are a few code changes you'll need to make that will call the Grains hosted in the Silo to get data to be displayed in the browser.
+One of the projects is a web-based table showing the various temperature sensors and their latest values. This ASP.NET Core Blazor project is named `Contoso.Monitoring.Web`. There are a few code changes you'll need to make that will call the Grains hosted in the Silo to get data to be displayed in the browser. 
 
 ## Adding code to the web app
 
