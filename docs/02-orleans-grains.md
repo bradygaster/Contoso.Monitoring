@@ -105,29 +105,10 @@ public async Task<MonitoredArea> GetMonitoredArea(string areaName)
 
 In the `Contoso.Monitoring.Sensors.Silo` project's `Program.cs`, you'll see how a Microsoft Orleans cluster silo - essentially a multi-server application server that hosts you'r grain class instances - is hosted using the .NET Core Generic Host.
 
-```csharp
-await Host
-        .CreateDefaultBuilder(args)
-        .UseOrleans(siloBuilder =>
-        {
-            siloBuilder
-                .AddMemoryGrainStorage(name: "contosoMonitoringStore")
-                .Configure<ClusterOptions>(options =>
-                    {
-                        options.ClusterId = "dev";
-                        options.ServiceId = "ContosoMonitoring";
-                    })
-                .UseLocalhostClustering();
-        })
-        .RunConsoleAsync();
-```
-
-The `UseOrleans` extension method is essentially all that a .NET Core Generic Host needs to host all the grains in a distributed system. 
-
 ---
 
 ## Next Steps
 
-Ready to get the app up and running? In the next step you'll clone the project and get it running locally.
+Ready to get the app up and running? In the next step you'll run the Orleans Silo, host the temperature sensor and monitoring grains in it, and host the Orleans Dashboard.
 
 [Go to Phase 3](03-clone-repo-and-run-silo.md)
