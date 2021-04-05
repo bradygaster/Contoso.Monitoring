@@ -99,11 +99,7 @@ public async Task<MonitoredArea> GetMonitoredArea(string areaName)
         Temperature = await _grainFactory.GetGrain<ITemperatureSensorGrain>(areaName).GetTemperature()
     };
 }
-``` 
-
-## Hosting Grains
-
-In the `Contoso.Monitoring.Sensors.Silo` project's `Program.cs`, you'll see how a Microsoft Orleans cluster silo - essentially a multi-server application server that hosts you'r grain class instances - is hosted using the .NET Core Generic Host.
+```
 
 ---
 
