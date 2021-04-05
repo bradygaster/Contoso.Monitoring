@@ -76,6 +76,6 @@ If you want to see the performance of a specific grain being used across multipl
 
 ## Next Steps
 
-Ready to get the app up and running? In the next step you'll clone the project and get it running locally.
+That's the end of the exercise. In the next segment we'll have some Q&A. 
 
-[Go to Phase 3](03-clone-repo-and-run-silo.md)
+[Discussion](06-follow-up-discussion.md)
