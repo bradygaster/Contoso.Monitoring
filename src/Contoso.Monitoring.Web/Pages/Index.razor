@@ -1,5 +1,4 @@
 @page "/"
-@inject ContosoMonitoringClientService _contosoMonitoringClientService;
 
 <h1>Monitored Areas</h1>
 
@@ -27,8 +26,4 @@
 {
     private List<MonitoredArea> _areas = new List<MonitoredArea>();
 
-    protected override async Task OnInitializedAsync()
-    {
-        _areas = await _contosoMonitoringClientService.GetMonitoredAreas();
-    }
 }
