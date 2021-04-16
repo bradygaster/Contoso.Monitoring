@@ -23,4 +23,4 @@ In the first phase of the tutorial you'll validate that you have the required pr
 
 Now that the initial discussion and exploration is complete, you can continue on the start the tutorial. 
 
-[Go to Phase 2](docs/01-setup.md)
+[Go to Phase 1](docs/01-setup.md)
