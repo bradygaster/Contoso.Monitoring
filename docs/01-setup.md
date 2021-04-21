@@ -2,14 +2,16 @@
 
 Clone (or download) the contents of this repository. Please clone the `main` branch to make sure you get the tutorial code and not the finished code. If you'd like to clone the finished code into another local repository to reference whilst you work, clone the `finished` branch locally.
 
-## Goals
+## Prerequisites
 
-You will complete the following tasks in this tutorial:
+You will need the following things on your computer to perform the tutorial. The tutorial can be performed using Windows, Mac, or Linux. 
 
-1. Get the Contoso Monitoring application server cluster running locally.
-1. Get the Contoso Monitoring temperature sensor worker service running locally.
-1. Use the Orleans Dashboard to see how your temperature sensor worker instance(s) are creating and using Grains.
-1. Add code to the ASP.NET Core Blazor dashboard to show the status of the temperature sensors in a web-based dashboard.
+1. [.NET Core](https://dotnet.microsoft.com/download)
+1. [Visual Studio Code](https://code.visualstudio.com/)
+
+OR
+
+1. [Visual Studio 2019 Preview](https://visualstudio.microsoft.com/vs/preview/)
 
 ---
 
