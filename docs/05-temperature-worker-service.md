@@ -76,6 +76,4 @@ If you want to see the performance of a specific grain being used across multipl
 
 ## Next Steps
 
-That's the end of the exercise. In the next segment we'll have some Q&A. 
-
-[Discussion](06-follow-up-discussion.md)
+That's the end of the exercise. In the next segment we'll have some Q&A. Thank you for your participation in the tutorial. 
