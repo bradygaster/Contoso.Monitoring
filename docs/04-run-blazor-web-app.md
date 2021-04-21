@@ -7,7 +7,7 @@ One of the projects is a web-based table showing the various temperature sensors
 The Web App will use an Orleans client to connect to the underlying silo running on `localhost`. The `Contoso.Monitoring.Sensors.Temperature` project uses the same technique to facilitate this connectivity, so you'll copy the `ContosoMonitoringClientService.cs` file from the `Contoso.Monitoring.Sensors.Temperature` project into the `Contoso.Monitoring.Web` project. Complete the following steps to perform this task.
 
 1. First, make a new folder in the `Contoso.Monitoring.Web` project named `Services`.
-1. Copy the `ContosoMonitoringClientService.cs` file from the `Contoso.Monitoring.Sensors.Temperature` project into the `Services` folderr in the `Contoso.Monitoring.Web` project.
+1. Copy the `ContosoMonitoringClientService.cs` file from the `Contoso.Monitoring.Sensors.Temperature` project into the `Services` folder in the `Contoso.Monitoring.Web` project.
 1. Open the `ContosoMonitoringClientService.cs` file you just copied into the `Contoso.Monitoring.Web/Services` folder and add the `GetMonitoredAreas` method into the `ContosoMonitoringClientService` class.
 
     > Note: make sure you do this in the `Contoso.Monitoring.Web` project and **not** in the `Contoso.Monitoring.Sensors.Temperature` project.
@@ -79,7 +79,7 @@ If you're using Visual Studio Code, right-click the folder's project and open th
 
 > Note: You don't need to close the already-running Silo project's active terminal window. Visual Studio Code supports multiple simultaneous terminal windows. 
 
-![Open the web project in the integrated terminal.](media/04-open-terrminal-web.png)
+![Open the web project in the integrated terminal.](media/04-open-terminal-web.png)
 
 Once again, type the command `dotnet run` to run the web project. If it doesn't automatically open, you can click the https://localhost:5001 link in the log output to open it in a browser. 
 
