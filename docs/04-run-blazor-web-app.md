@@ -87,7 +87,7 @@ If you're using Visual Studio Code, right-click the folder's project and open th
 
 ![Open the web project in the integrated terminal.](media/04-open-terminal-web.png)
 
-Once again, type the command `dotnet run` to run the web project. If it doesn't automatically open, you can click the https://localhost:5001 link in the log output to open it in a browser. 
+Once again, type the command `dotnet run` to run the web project. If it doesn't automatically open, you can click the http://localhost:5000 link in the log output to open it in a browser. 
 
 ![The web project running from the terminal window.](media/05-web-running.png)
 
