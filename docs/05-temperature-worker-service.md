@@ -63,7 +63,7 @@ Now, start up more terminal instances - 4 or 5 or more - of the terminal window 
 
 ![Dashboard - top level](media/11-dashboard.png)
 
-Note the "total activatiosn" area in the top-left quadrant of the dashboard. Click that, and you'll see the grains that have been activated in the silo. 
+Note the "total activations" area in the top-left quadrant of the dashboard. Click that, and you'll see the grains that have been activated in the silo. 
 
 ![Dashboard - grain level](media/12-dashboard.png)
 
