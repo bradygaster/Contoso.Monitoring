@@ -1,4 +1,5 @@
 # Question 2 (of 4)
+If you wanted to teach another person who is not familiar with Orleans how would you describe Silo? 
 
 What do you think about the name 'Silo' for this concept? 
 
