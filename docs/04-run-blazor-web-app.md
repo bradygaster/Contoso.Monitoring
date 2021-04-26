@@ -50,7 +50,13 @@ The Web App will use an Orleans client to connect to the underlying silo running
     }
     ```
 
-1. Open the `Startup.cs` file, find the `ConfigureServices` method in it, and paste this code at the end of the method. This code will place an instance of the `ContosoMonitoringClientService` and the `ClusterWorker` `IHostedService` into the ASP.NET Core's IoC container. 
+1. Open the `Startup.cs` file, and add this namespace `using` to the top of the file:
+
+    ```csharp
+    using Contoso.Monitoring.Web.Services;
+    ```
+
+1. In the `Startup.cs` file, find the `ConfigureServices` method in it, and paste this code at the end of the method. This code will place an instance of the `ContosoMonitoringClientService` and the `ClusterWorker` `IHostedService` into the ASP.NET Core's IoC container. 
 
     ```csharp
     services.AddSingleton<ContosoMonitoringClientService>();
