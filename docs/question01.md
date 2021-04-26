@@ -1,4 +1,5 @@
 # Question 1 (of 4)
+If you wanted to teach another person who is not familiar with Orleans how would you describe Grains? 
 
 What do you think about the name 'Grain' for this concept? 
 
