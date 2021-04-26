@@ -13,6 +13,11 @@ namespace Contoso.Monitoring
         internal IClusterClient Client { get; private set; }
         private ILogger<ContosoMonitoringClientService> _logger;
 
+        internal async Task<List<MonitoredArea>> GetMonitoredAreas()
+        {
+            return (await Client.GetGrain<IMonitoredBuildingGrain>(Guid.Empty).GetMonitoredAreas());
+        }
+
         public ContosoMonitoringClientService(ILogger<ContosoMonitoringClientService> logger)
         {
             _logger = logger;
