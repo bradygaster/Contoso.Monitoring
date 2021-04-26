@@ -1,6 +1,6 @@
 # Question 2 (of 4)
 
-What do you think about the name 'Grain' for this concept? 
+What do you think about the name 'Silo' for this concept? 
 
 How would you rate these names for the concept of a Silo?
 
