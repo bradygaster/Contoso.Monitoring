@@ -1,4 +1,4 @@
-# Question 2 (of 4)
+# Question 1 (of 4)
 
 What do you think about the name 'Grain' for this concept? 
 
