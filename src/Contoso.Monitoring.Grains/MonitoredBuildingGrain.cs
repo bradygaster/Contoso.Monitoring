@@ -14,7 +14,6 @@ namespace Contoso.Monitoring.Grains
         private readonly ILogger<MonitoredBuildingGrain> _logger;
         private readonly IPersistentState<MonitoredBuildingGrainState> _monitoredBuildingGrainState;
         private readonly IGrainFactory _grainFactory;
-        private ITemperatureSensorGrain _temperatureSensorGrain;
 
         public MonitoredBuildingGrain(ILogger<MonitoredBuildingGrain> logger,
             [PersistentState("monitoredBuildingGrainState", "contosoMonitoringStore")] 
