@@ -9,7 +9,7 @@ The Web App will use an Orleans client to connect to the underlying silo running
 1. Open the `ContosoMonitoringClientService.cs` file from the `Contoso.Monitoring.Grains` project. Add the following code to the class.
 
     ```csharp
-    internal async Task<List<MonitoredArea>> GetMonitoredAreas()
+    public async Task<List<MonitoredArea>> GetMonitoredAreas()
     {
         return (await Client.GetGrain<IMonitoredBuildingGrain>(Guid.Empty).GetMonitoredAreas());
     }
