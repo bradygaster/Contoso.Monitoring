@@ -1,8 +1,9 @@
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Contoso.Monitoring.Grains.Interfaces;
 
-namespace Contoso.Monitoring.Sensors.Temperature.Services
+namespace Contoso.Monitoring.Sensors.Temperature
 {
     public class FakeTemperatureSensorClient : ITemperatureSensorClient
     {
@@ -13,8 +14,8 @@ namespace Contoso.Monitoring.Sensors.Temperature.Services
         {
             _rnd = new Random();
             _randomSensorName = string.Concat(
-                _rnd.Next(1, 4).ToString(), 
-                _rnd.Next(1, 11).ToString().PadLeft(2, '0')
+                _rnd.Next(1, 4).ToString(CultureInfo.CurrentCulture), 
+                _rnd.Next(1, 11).ToString(CultureInfo.CurrentCulture).PadLeft(2, '0')
             );
         }
 

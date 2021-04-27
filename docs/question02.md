@@ -1,7 +1,4 @@
-# Question 2 (of 4)
-If you wanted to teach another person who is not familiar with Orleans how would you describe Silo? 
-
-What do you think about the name 'Silo' for this concept? 
+# Question 2 (of 3)
 
 How would you rate these names for the concept of a Silo?
 
@@ -13,5 +10,7 @@ How would you rate these names for the concept of a Silo?
 ---
 
 ## Next Steps
+
+> Please wait for the researcher(s) to ask some questions before continuing to the next step.
 
 [Question 3 (of 4)](question03.md)

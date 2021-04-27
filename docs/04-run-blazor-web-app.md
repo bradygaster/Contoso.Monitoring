@@ -1,16 +1,12 @@
-# Run the Blazor Web App
+# Phase 4 - Connect an ASP.NET Core Web project to Orleans
 
 One of the projects is a web-based table showing the various temperature sensors and their latest values. This ASP.NET Core Blazor project is named `Contoso.Monitoring.Web`. There are a few code changes you'll need to make that will call the Grains hosted in the Silo to get data to be displayed in the browser. 
 
 ## Adding code to the web app
 
-The Web App will use an Orleans client to connect to the underlying silo running on `localhost`. The `Contoso.Monitoring.Sensors.Temperature` project uses the same technique to facilitate this connectivity, so you'll copy the `ContosoMonitoringClientService.cs` file from the `Contoso.Monitoring.Sensors.Temperature` project into the `Contoso.Monitoring.Web` project. Complete the following steps to perform this task.
+The Web App will use an Orleans client to connect to the underlying silo running on `localhost`. Complete the following steps to perform this task.
 
-1. First, make a new folder in the `Contoso.Monitoring.Web` project named `Services`.
-1. Copy the `ContosoMonitoringClientService.cs` file from the `Contoso.Monitoring.Sensors.Temperature` project into the `Services` folder in the `Contoso.Monitoring.Web` project.
-1. Open the `ContosoMonitoringClientService.cs` file you just copied into the `Contoso.Monitoring.Web/Services` folder and add the `GetMonitoredAreas` method into the `ContosoMonitoringClientService` class.
-
-    > Note: make sure you do this in the `Contoso.Monitoring.Web` project and **not** in the `Contoso.Monitoring.Sensors.Temperature` project.
+1. Open the `ContosoMonitoringClientService.cs` file from the `Contoso.Monitoring.Grains` project. Add the following code to the class.
 
     ```csharp
     internal async Task<List<MonitoredArea>> GetMonitoredAreas()
@@ -19,14 +15,14 @@ The Web App will use an Orleans client to connect to the underlying silo running
     }
     ```
 
-1. Add a new file to the `Services` folder in the `Contoso.Monitoring.Web` project named `ClusterWorker.cs`. The Cluster Worker service will provide a background service that will connect to the Silo when the web app starts, and disconnect when the web app stops. Paste the following code into the new `ClusterWorker.cs` file.
+1. Add a new file to `Contoso.Monitoring.Web` project named `ClusterWorker.cs`. The Cluster Worker service will provide a background service that will connect to the Silo when the web app starts, and disconnect when the web app stops. Paste the following code into the new `ClusterWorker.cs` file.
 
     ```csharp
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.Extensions.Hosting;
 
-    namespace Contoso.Monitoring.Web.Services
+    namespace Contoso.Monitoring.Web
     {
         public class ClusterWorker : IHostedService
         {
@@ -50,13 +46,7 @@ The Web App will use an Orleans client to connect to the underlying silo running
     }
     ```
 
-1. Open the `Startup.cs` file, and add this namespace `using` to the top of the file:
-
-    ```csharp
-    using Contoso.Monitoring.Web.Services;
-    ```
-
-1. In the `Startup.cs` file, find the `ConfigureServices` method in it, and paste this code at the end of the method. This code will place an instance of the `ContosoMonitoringClientService` and the `ClusterWorker` `IHostedService` into the ASP.NET Core's IoC container. 
+1. In the `Contoso.Monitoring.Web` project's `Startup.cs` file, find the `ConfigureServices` method. Paste this code at the end of the method. This code will place an instance of the `ContosoMonitoringClientService` and the `ClusterWorker` `IHostedService` into the ASP.NET Core's IoC container. 
 
     ```csharp
     services.AddSingleton<ContosoMonitoringClientService>();
@@ -81,17 +71,11 @@ The Web App will use an Orleans client to connect to the underlying silo running
 
 ## Running the web app 
 
-If you're using Visual Studio Code, right-click the folder's project and open the integrated terminal. 
+Using Visual Studio or Visual Studio Code, run the `Contoso.Monitoring.Web` project.
 
 > Note: You don't need to close the already-running Silo project's active terminal window. Visual Studio Code supports multiple simultaneous terminal windows. 
 
-![Open the web project in the integrated terminal.](media/04-open-terminal-web.png)
-
-Once again, type the command `dotnet run` to run the web project. If it doesn't automatically open, you can click the http://localhost:5000 link in the log output to open it in a browser. 
-
-![The web project running from the terminal window.](media/05-web-running.png)
-
-When the browser opens you'll see the table that will include the list of temperature sensors.
+When the browser opens you'll see the table that will include the list of temperature sensors. If the web browser doesn't automatically open, browse to http://localhostL:5000 to see it.
 
 ![The temperature page open in a browser.](media/06-browser-empty.png)
 

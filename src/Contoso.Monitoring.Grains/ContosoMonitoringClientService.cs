@@ -8,7 +8,7 @@ namespace Contoso.Monitoring
 {
     public class ContosoMonitoringClientService
     {
-        internal IClusterClient Client { get; private set; }
+        public IClusterClient Client { get; private set; }
         private ILogger<ContosoMonitoringClientService> _logger;
 
         public ContosoMonitoringClientService(ILogger<ContosoMonitoringClientService> logger)

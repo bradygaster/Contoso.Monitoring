@@ -1,13 +1,14 @@
-# Question 3 (of 4)
+# Question 3 (of 3)
 
-Could you tell us about your overall experience with the dashboard? Please feel free to take some time and explore it further if needed.
+Which of the following statements would you say are true about your experience using Microsoft Orleans today?
 
-Where would you expect to find the number of temperature emulators active in the Orleans cluster?
-
-How would you find the response time of a Grain method? 
+1. I found grains somewhat confusing at first but then in practice made more sense once I used them in the app.
+2. I found grains a necessary part of Orleans about which I needed to learn much more. 
+3. Grains feel like a marker interface that doesn’t offer much other than an abstraction
+4. I found Silos a necessary part of Orleans about which I needed to learn much more about
 
 ---
 
-## Next Steps
+## Thank you!
 
-[Question 4 (of 4)](question04.md)
+Thank you for your time and feedback during this study. We appreciate your feedback and your opinion.

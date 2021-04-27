@@ -1,9 +1,4 @@
-# Question 1 (of 4)
-If you wanted to teach another person who is not familiar with Orleans how would you describe Grains? 
-
-What do you think about the name 'Grain' for this concept? 
-
-Could you think of another name that might be an alternative?
+# Question 1 (of 3)
 
 How would you rate these names for the concept of a Grain?
 
@@ -15,5 +10,7 @@ How would you rate these names for the concept of a Grain?
 ---
 
 ## Next Steps
+
+> Please wait for the researcher(s) to ask some questions before continuing to the next step.
 
 [Question 2 (of 4)](question02.md)

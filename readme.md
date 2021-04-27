@@ -8,14 +8,10 @@ Our system consists of an ASP.NET Core web app, built using Blazor WebAssembly, 
 
 You will complete the following tasks in this tutorial:
 
-1. Get the Contoso Monitoring application server cluster running locally.
-1. Get the Contoso Monitoring temperature sensor worker service running locally.
+1. Get the Contoso Monitoring application server running locally.
 1. Use the Orleans Dashboard to see how your temperature sensor worker instance(s) are creating and using Grains.
 1. Add code to the ASP.NET Core Blazor dashboard to show the status of the temperature sensors in a web-based dashboard.
-
-## Questions and Discussion
-
-In the first phase of the tutorial you'll validate that you have the required prerequisites so you're ready to start the tutorial. Before you start the tutorial, we have a few questions and tasks to complete. 
+1. Get the Contoso Monitoring temperature sensor workers locally.
 
 ---
 
