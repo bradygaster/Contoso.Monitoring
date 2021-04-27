@@ -75,7 +75,7 @@ Using Visual Studio or Visual Studio Code, run the `Contoso.Monitoring.Web` proj
 
 > Note: You don't need to close the already-running Silo project's active terminal window. Visual Studio Code supports multiple simultaneous terminal windows. 
 
-When the browser opens you'll see the table that will include the list of temperature sensors. If the web browser doesn't automatically open, browse to http://localhostL:5000 to see it.
+When the browser opens you'll see the table that will include the list of temperature sensors. If the web browser doesn't automatically open, browse to http://localhost:5000 to see it.
 
 ![The temperature page open in a browser.](media/06-browser-empty.png)
 
