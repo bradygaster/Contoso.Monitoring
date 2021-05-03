@@ -23,7 +23,3 @@ Now, start up more terminal instances of the terminal window in the temperature 
 ## Next Steps
 
 That's the end of the exercise. In the next segment we'll have some Q&A. Thank you for your participation in the tutorial. 
-
-> Please wait for the researcher(s) to ask some questions before continuing to the next step.
-
-[Questions](final.md)
