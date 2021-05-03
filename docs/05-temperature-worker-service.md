@@ -26,4 +26,4 @@ That's the end of the exercise. In the next segment we'll have some Q&A. Thank y
 
 > Please wait for the researcher(s) to ask some questions before continuing to the next step.
 
-[Questions)](final.md)
+[Questions](final.md)
