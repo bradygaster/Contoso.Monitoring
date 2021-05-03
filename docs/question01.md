@@ -13,4 +13,4 @@ How would you rate these names for the concept of a Grain?
 
 > Please wait for the researcher(s) to ask some questions before continuing to the next step.
 
-[Question 2 (of 4)](question02.md)
+[Question 1 (of 3)](question02.md)

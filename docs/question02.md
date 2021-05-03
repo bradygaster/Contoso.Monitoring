@@ -13,4 +13,4 @@ How would you rate these names for the concept of a Silo?
 
 > Please wait for the researcher(s) to ask some questions before continuing to the next step.
 
-[Question 3 (of 4)](question03.md)
+[Question 2 (of 3)](question03.md)
