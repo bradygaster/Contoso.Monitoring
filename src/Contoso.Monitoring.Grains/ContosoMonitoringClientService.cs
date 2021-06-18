@@ -16,7 +16,7 @@ namespace Contoso.Monitoring
         public ContosoMonitoringClientService(ILogger<ContosoMonitoringClientService> logger)
         {
             _logger = logger;
-            
+
             try
             {
                 Client = new ClientBuilder().UseLocalhostClustering().Build();
@@ -62,6 +62,11 @@ namespace Contoso.Monitoring
 
                 return true;
             });
+        }
+
+        public async Task<List<MonitoredArea>> GetMonitoredAreas()
+        {
+            return (await Client.GetGrain<IMonitoredBuildingGrain>(Guid.Empty).GetMonitoredAreas());
         }
     }
 }

@@ -1,0 +1,20 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+name: contoso.monitoring
+services:
+  - name: sensor
+    project: src/Contoso.Monitoring.Sensors.Temperature/Contoso.Monitoring.Sensors.Temperature.csproj
+    replicas: 25
+  - name: silo
+    project: src/Contoso.Monitoring.Sensors.Silo/Contoso.Monitoring.Sensors.Silo.csproj
+  - name: web
+    project: src/Contoso.Monitoring.Web/Contoso.Monitoring.Web.csproj
+  - name: orleans-dashboard
+    external: true
+    bindings:
+      - port: 8080
+        protocol: http

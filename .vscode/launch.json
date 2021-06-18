@@ -29,6 +29,13 @@
             "type": "coreclr",
             "request": "attach",
             "processId": "${command:pickProcess}"
+        },
+        {
+            "applicationName": "contoso.monitoring",
+            "name": "Debug with Tye",
+            "preLaunchTask": "tye-run",
+            "request": "launch",
+            "type": "tye"
         }
     ]
 }
