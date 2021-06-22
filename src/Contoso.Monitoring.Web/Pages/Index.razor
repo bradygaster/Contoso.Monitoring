@@ -1,13 +1,15 @@
 @page "/"
 @inject IConfiguration _configuration;
 @inject SiloService _siloService;
+@inject NavigationManager _navigationManager;
+@implements IAsyncDisposable
 
 <h1>Monitored Areas</h1>
 
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Name</th>
+            <th>Area Name</th>
             <th>Temperature (Fahrenheit)</th>
             <th>Temperature (Celsius)</th>
         </tr>
@@ -19,8 +21,8 @@
             {
                 <tr>
                     <td>@area.Name</td>
-                    <td id='@($"{area.Name}-F")'>@area.Temperature.Fahrenheit.ToString("#")</td>
-                    <td id='@($"{area.Name}-C")'>@area.Temperature.Celsius.ToString("#")</td>
+                    <td>@area.Temperature.Fahrenheit</td>
+                    <td>@area.Temperature.Celsius.ToString("#")</td>
                 </tr>
             }
         }
@@ -30,11 +32,31 @@
 @code
 {
     private List<MonitoredArea> _areas = new List<MonitoredArea>();
+    private HubConnection _hubConnection;
 
     protected override async Task OnInitializedAsync()
     {
         _areas = await _siloService.GetMonitoredAreas();
 
+        _hubConnection = new HubConnectionBuilder().WithUrl(_navigationManager.ToAbsoluteUri("/hubs/monitor")).Build();
+
+        _hubConnection.On<TemperatureReading>("ReceiveUpdate", (reading) =>
+        {
+            var existing = _areas.First(_ => _.Name == reading.SensorName);
+            _areas.Remove(existing);
+            existing.Temperature = reading;
+            _areas.Add(existing);
+            _areas = _areas.OrderBy(_ => _.Name).ToList();
+            base.StateHasChanged();
+        });
+
+        await _hubConnection.StartAsync();
+
         base.StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _hubConnection.DisposeAsync();
     }
 }

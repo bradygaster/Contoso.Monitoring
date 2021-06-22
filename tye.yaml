@@ -8,7 +8,7 @@ name: contoso.monitoring
 services:
   - name: sensor
     project: src/Contoso.Monitoring.Sensors.Temperature/Contoso.Monitoring.Sensors.Temperature.csproj
-    replicas: 2
+    replicas: 5
   - name: silo
     project: src/Contoso.Monitoring.Sensors.Silo/Contoso.Monitoring.Sensors.Silo.csproj
   - name: web
