@@ -1,6 +1,6 @@
 @page "/"
-@inject ContosoMonitoringClientService _contosoMonitoringClientService;
-
+@inject IConfiguration _configuration;
+@inject SiloService _siloService;
 
 <h1>Monitored Areas</h1>
 
@@ -13,13 +13,16 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var area in _areas)
+        @if (_areas != null)
         {
-            <tr>
-                <td>@area.Name</td>
-                <td>@area.Temperature.Fahrenheit.ToString("#")</td>
-                <td>@area.Temperature.Celsius.ToString("#")</td>
-            </tr>
+            @foreach (var area in _areas)
+            {
+                <tr>
+                    <td>@area.Name</td>
+                    <td id='@($"{area.Name}-F")'>@area.Temperature.Fahrenheit.ToString("#")</td>
+                    <td id='@($"{area.Name}-C")'>@area.Temperature.Celsius.ToString("#")</td>
+                </tr>
+            }
         }
     </tbody>
 </table>
@@ -27,8 +30,11 @@
 @code
 {
     private List<MonitoredArea> _areas = new List<MonitoredArea>();
+
     protected override async Task OnInitializedAsync()
     {
-        _areas = await _contosoMonitoringClientService.GetMonitoredAreas();
+        _areas = await _siloService.GetMonitoredAreas();
+
+        base.StateHasChanged();
     }
 }

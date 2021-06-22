@@ -19,6 +19,19 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "tye run watch",
+            "command": "tye",
+            "args": [
+                "run",
+                "--watch"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
             "applicationName": "contoso.monitoring",
             "label": "tye-run",
             "type": "tye-run"

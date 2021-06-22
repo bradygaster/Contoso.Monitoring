@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Contoso.Monitoring.Grains.Interfaces;
@@ -66,7 +67,7 @@ namespace Contoso.Monitoring
 
         public async Task<List<MonitoredArea>> GetMonitoredAreas()
         {
-            return (await Client.GetGrain<IMonitoredBuildingGrain>(Guid.Empty).GetMonitoredAreas());
+            return await Client.GetGrain<IMonitoredBuildingGrain>(Guid.Empty).GetMonitoredAreas();
         }
     }
 }

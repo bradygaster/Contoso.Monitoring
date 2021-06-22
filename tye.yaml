@@ -8,11 +8,13 @@ name: contoso.monitoring
 services:
   - name: sensor
     project: src/Contoso.Monitoring.Sensors.Temperature/Contoso.Monitoring.Sensors.Temperature.csproj
-    replicas: 25
+    replicas: 2
   - name: silo
     project: src/Contoso.Monitoring.Sensors.Silo/Contoso.Monitoring.Sensors.Silo.csproj
   - name: web
     project: src/Contoso.Monitoring.Web/Contoso.Monitoring.Web.csproj
+    bindings:
+      - protocol: https
   - name: orleans-dashboard
     external: true
     bindings:

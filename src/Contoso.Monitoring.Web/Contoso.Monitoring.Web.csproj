@@ -2,14 +2,17 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
     </PropertyGroup>
     
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.7" />
         <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.4.1">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.Orleans.OrleansProviders" Version="3.4.1" />
+        <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.7.0-alpha.21279.2" />
     </ItemGroup>
     
     <ItemGroup>

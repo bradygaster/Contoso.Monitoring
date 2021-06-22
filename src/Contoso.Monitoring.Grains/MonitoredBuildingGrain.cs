@@ -16,7 +16,7 @@ namespace Contoso.Monitoring.Grains
         private readonly IGrainFactory _grainFactory;
 
         public MonitoredBuildingGrain(ILogger<MonitoredBuildingGrain> logger,
-            [PersistentState("monitoredBuildingGrainState", "contosoMonitoringStore")] 
+            [PersistentState("monitoredBuildingGrainState", "contosoMonitoringStore")]
             IPersistentState<MonitoredBuildingGrainState> monitoredBuildingGrainState,
             IGrainFactory grainFactory)
         {
@@ -35,14 +35,11 @@ namespace Contoso.Monitoring.Grains
             _monitoredBuildingGrainState.State.MonitoredAreaNames.ForEach(_ => _logger.LogInformation(_));
             return Task.CompletedTask;
         }
-        public async Task<MonitoredArea> GetMonitoredArea(string areaName)
+        public async Task<MonitoredArea> GetMonitoredArea(string areaName) => new MonitoredArea
         {
-            return new MonitoredArea
-            {
-                Name = areaName,
-                Temperature = await _grainFactory.GetGrain<ITemperatureSensorGrain>(areaName).GetTemperature()
-            };
-        }
+            Name = areaName,
+            Temperature = await _grainFactory.GetGrain<ITemperatureSensorGrain>(areaName).GetTemperature()
+        };
 
         public async Task<List<MonitoredArea>> GetMonitoredAreas()
         {
