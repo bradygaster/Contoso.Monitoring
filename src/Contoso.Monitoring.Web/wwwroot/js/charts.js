@@ -31,27 +31,26 @@ const dataTemplate = {
     ]
 };
 
-const config = {
-    type: 'line',
-    data: dataTemplate,
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top',
-            },
-            title: {
-                display: true,
-                text: 'Sensor Reading'
-            }
-        }
-    },
-};
-
 class ChartViewModel {
     constructor(sensor) {
         this.sensorId = sensor;
         this.data = [];
+        this.config = {
+            type: 'line',
+            data: dataTemplate,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Sensor Reading'
+                    }
+                }
+            },
+        };
     }
 
     addDataPoint = (c, f) => {
@@ -103,10 +102,9 @@ window.addChartValue = (sensorId, c, f) => {
             viewModel.addChart(sensorId);
 
             try {
-                var myChart = new Chart(document.getElementById('chart-' + sensorId), config);
+                var myChart = new Chart(document.getElementById('chart-' + sensorId), viewModel.Sensors[sensorId].config);
             } catch (ex) {
-                // console.log(ex);
-                // worry about this later
+                //console.log(ex);
             }
             
         }
