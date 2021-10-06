@@ -9,8 +9,8 @@ namespace Contoso.Monitoring.Sensors.Temperature
     public class FakeTemperatureSensorClient : ITemperatureSensorClient
     {
         // Min temperature, max temperature, min duration of a temperature swing in seconds, and max of that.
-        private const double MinVal = 60;
-        private const double MaxVal = 80;
+        private const double MinVal = 32;
+        private const double MaxVal = 90;
         private const int MinPhaseDuration = 5;
         private const int MaxPhaseDuration = 30;
 

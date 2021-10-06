@@ -7,34 +7,20 @@
 
 <h1>Monitored Areas</h1>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Area Name</th>
-            <th>Temperature (Fahrenheit)</th>
-            <th>Temperature (Celsius)</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (_areas != null)
-        {
-            @foreach (var area in _areas)
-            {
-                <tr>
-                    <td>@area.Name</td>
-                    <td>@area.Temperature.Fahrenheit.ToString("#.##")</td>
-                    <td>@area.Temperature.Celsius.ToString("#.##")</td>
-                    <td>
-                        <div style="width: 600px; height: 400px;">
-                            <canvas id="chart-@area.Name"></canvas>
-                        </div>
-                    </td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
+<div class="card-columns">
+    @foreach (var area in _areas)
+    {
+        <div class="card">
+            <div class="card-body">
+                <p class="card-text">
+                    <div id="chart-@area.Name">
+                    </div>
+                </p>
+                <p class="card-text"><small class="text-muted">@area.Temperature.Fahrenheit.ToString("#.##") F / @area.Temperature.Celsius.ToString("#.##") C</small></p>
+            </div>
+        </div>
+    }
+</div>
 
 @code
 {

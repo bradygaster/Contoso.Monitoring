@@ -3,41 +3,38 @@
     'Fahrenheit'
 ];
 
-const dataTemplate = {
-    labels: labels,
-    datasets: [
-        {
-            label: 'Celsius',
-            data: [12, 11, 12, 13, 14, 14, 13],
-            backgroundColor: [
-                'rgba(255, 99, 132, 1)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)'
-            ],
-            borderWidth: 1
-        },
-        {
-            label: 'Fahrenheit',
-            data: [66, 66, 67, 70, 69, 70, 70],
-            backgroundColor: [
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderColor: [
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }
-    ]
-};
-
 class ChartViewModel {
     constructor(sensor) {
         this.sensorId = sensor;
-        this.data = [];
         this.config = {
             type: 'line',
-            data: dataTemplate,
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Celsius',
+                        data: [],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Fahrenheit',
+                        data: [],
+                        backgroundColor: [
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }
+                ]
+            },
             options: {
                 responsive: true,
                 plugins: {
@@ -46,21 +43,41 @@ class ChartViewModel {
                     },
                     title: {
                         display: true,
-                        text: 'Sensor Reading'
+                        text: 'Sensor ' + sensor + ' Reading'
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 100,
                     }
                 }
             },
         };
+
+        document.getElementById('chart-' + this.sensorId).innerHTML = '<canvas id="canvas-' + this.sensorId + '"></canvas>';
+        this.chart = new Chart(document.getElementById('canvas-' + this.sensorId), this.config);
     }
 
     addDataPoint = (c, f) => {
-        if (this.data.length == 100) {
-            this.data.pop();
+        try {
+
+            if (this.config.data.datasets[0].data.length == 100) {
+                this.config.data.datasets[0].data.pop();
+            }
+            this.config.data.datasets[0].data.push(c);
+
+            if (this.config.data.datasets[1].data.length == 100) {
+                this.config.data.datasets[1].data.pop();
+            }
+            this.config.data.datasets[1].data.push(f);
+
+            this.chart.update();
+
+            //console.log('Sensor ' + this.sensorId + ' has ' + this.config.data.datasets[0].data.length + ' c values and ' + this.config.data.datasets[1].data.length + ' f values.');
+        } catch (e) {
+            console.log(e);
         }
-        this.data.push({
-            Celsius: c,
-            Fahrenheit: f
-        });
     }
 }
 
@@ -100,13 +117,6 @@ window.addChartValue = (sensorId, c, f) => {
     try {
         if (viewModel.chartExists(sensorId) == false) {
             viewModel.addChart(sensorId);
-
-            try {
-                var myChart = new Chart(document.getElementById('chart-' + sensorId), viewModel.Sensors[sensorId].config);
-            } catch (ex) {
-                //console.log(ex);
-            }
-            
         }
         viewModel.addReadingToChart(sensorId, c, f);
     } catch (e) {
