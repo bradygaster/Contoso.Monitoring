@@ -3,6 +3,7 @@
 @inject SiloService _siloService;
 @inject NavigationManager _navigationManager;
 @implements IAsyncDisposable
+@inject IJSRuntime JS
 
 <h1>Monitored Areas</h1>
 
@@ -12,6 +13,7 @@
             <th>Area Name</th>
             <th>Temperature (Fahrenheit)</th>
             <th>Temperature (Celsius)</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -21,8 +23,13 @@
             {
                 <tr>
                     <td>@area.Name</td>
-                    <td>@area.Temperature.Fahrenheit</td>
-                    <td>@area.Temperature.Celsius.ToString("#")</td>
+                    <td>@area.Temperature.Fahrenheit.ToString("#.##")</td>
+                    <td>@area.Temperature.Celsius.ToString("#.##")</td>
+                    <td>
+                        <div style="width: 600px; height: 400px;">
+                            <canvas id="chart-@area.Name"></canvas>
+                        </div>
+                    </td>
                 </tr>
             }
         }
@@ -40,13 +47,16 @@
 
         _hubConnection = new HubConnectionBuilder().WithUrl(_navigationManager.ToAbsoluteUri("/hubs/monitor")).Build();
 
-        _hubConnection.On<TemperatureReading>("ReceiveUpdate", (reading) =>
+        _hubConnection.On<TemperatureReading>("ReceiveUpdate", async (reading) =>
         {
             var existing = _areas.First(_ => _.Name == reading.SensorName);
             _areas.Remove(existing);
             existing.Temperature = reading;
             _areas.Add(existing);
             _areas = _areas.OrderBy(_ => _.Name).ToList();
+
+            await JS.InvokeVoidAsync("addChartValue", reading.SensorName, reading.Celsius.ToString("#.###"), reading.Fahrenheit.ToString("#.###"));
+
             base.StateHasChanged();
         });
 
