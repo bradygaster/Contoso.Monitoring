@@ -2,7 +2,6 @@
 @inject IConfiguration _configuration;
 @inject SiloService _siloService;
 @inject NavigationManager _navigationManager;
-@implements IAsyncDisposable
 @inject IJSRuntime JS
 
 <h1>Monitored Areas</h1>
@@ -14,6 +13,7 @@
             <div class="card-body">
                 <p class="card-text">
                     <div id="chart-@area.Name">
+                        <canvas id="canvas-@area.Name"></canvas>
                     </div>
                 </p>
                 <p class="card-text"><small class="text-muted">@area.Temperature.Fahrenheit.ToString("#.##") F / @area.Temperature.Celsius.ToString("#.##") C</small></p>
@@ -25,34 +25,10 @@
 @code
 {
     private List<MonitoredArea> _areas = new List<MonitoredArea>();
-    private HubConnection _hubConnection;
 
     protected override async Task OnInitializedAsync()
     {
         _areas = await _siloService.GetMonitoredAreas();
-
-        _hubConnection = new HubConnectionBuilder().WithUrl(_navigationManager.ToAbsoluteUri("/hubs/monitor")).Build();
-
-        _hubConnection.On<TemperatureReading>("ReceiveUpdate", async (reading) =>
-        {
-            var existing = _areas.First(_ => _.Name == reading.SensorName);
-            _areas.Remove(existing);
-            existing.Temperature = reading;
-            _areas.Add(existing);
-            _areas = _areas.OrderBy(_ => _.Name).ToList();
-
-            await JS.InvokeVoidAsync("addChartValue", reading.SensorName, reading.Celsius.ToString("#.###"), reading.Fahrenheit.ToString("#.###"));
-
-            base.StateHasChanged();
-        });
-
-        await _hubConnection.StartAsync();
-
-        base.StateHasChanged();
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        await _hubConnection.DisposeAsync();
+        _areas = _areas.OrderBy(_ => _.Name).ToList();
     }
 }

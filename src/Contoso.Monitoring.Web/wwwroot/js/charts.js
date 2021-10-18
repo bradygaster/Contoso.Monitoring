@@ -6,6 +6,7 @@
 class ChartViewModel {
     constructor(sensor) {
         this.sensorId = sensor;
+        this.sampleSize = 10;
         this.config = {
             type: 'line',
             data: {
@@ -20,7 +21,9 @@ class ChartViewModel {
                         borderColor: [
                             'rgba(255, 99, 132, 1)'
                         ],
-                        borderWidth: 1
+                        borderWidth: 1,
+                        lineTension: 0.25,
+                        pointRadius: 0
                     },
                     {
                         label: 'Fahrenheit',
@@ -31,7 +34,9 @@ class ChartViewModel {
                         borderColor: [
                             'rgba(255, 159, 64, 1)'
                         ],
-                        borderWidth: 1
+                        borderWidth: 1,
+                        lineTension: 0.25,
+                        pointRadius: 0
                     }
                 ]
             },
@@ -46,6 +51,10 @@ class ChartViewModel {
                         text: 'Sensor ' + sensor + ' Reading'
                     }
                 },
+                animation: {
+                    duration: 1,
+                    easing: 'linear'
+                },
                 scales: {
                     y: {
                         min: 0,
@@ -55,24 +64,26 @@ class ChartViewModel {
             },
         };
 
-        document.getElementById('chart-' + this.sensorId).innerHTML = '<canvas id="canvas-' + this.sensorId + '"></canvas>';
-        this.chart = new Chart(document.getElementById('canvas-' + this.sensorId), this.config);
+        this.config.data.datasets[0].data.length = this.sampleSize;
+        this.config.data.datasets[1].data.length = this.sampleSize;
+        this.config.data.datasets[0].data.fill(50);
+        this.config.data.datasets[1].data.fill(50);
+
+        window.setTimeout(() => {
+            this.chart = new Chart(document.getElementById('canvas-' + this.sensorId).getContext('2d'), this.config);
+        }, 300);
     }
 
     addDataPoint = (c, f) => {
         try {
-
-            if (this.config.data.datasets[0].data.length == 100) {
-                this.config.data.datasets[0].data.pop();
-            }
             this.config.data.datasets[0].data.push(c);
-
-            if (this.config.data.datasets[1].data.length == 100) {
-                this.config.data.datasets[1].data.pop();
-            }
+            this.config.data.datasets[0].data.shift();
             this.config.data.datasets[1].data.push(f);
+            this.config.data.datasets[1].data.shift();
 
-            this.chart.update();
+            if(this.chart) {
+                this.chart.update();
+            }
 
             //console.log('Sensor ' + this.sensorId + ' has ' + this.config.data.datasets[0].data.length + ' c values and ' + this.config.data.datasets[1].data.length + ' f values.');
         } catch (e) {
@@ -123,3 +134,29 @@ window.addChartValue = (sensorId, c, f) => {
         console.log(e);
     }
 }
+
+const connection = new signalR.HubConnectionBuilder()
+    .withUrl('/hubs/monitor')
+    .build();
+
+window.onload = () => {
+    connection.on('ReceiveUpdate', (reading) => {
+        window.addChartValue(reading.sensorName, reading.celsius, reading.fahrenheit);
+    });
+
+    start();
+}
+
+async function start() {
+    try {
+        await connection.start();
+        console.log("SignalR Connected.");
+    } catch (err) {
+        console.log(err);
+        setTimeout(start, 5000);
+    }
+};
+
+connection.onclose(async () => {
+    await start();
+});
