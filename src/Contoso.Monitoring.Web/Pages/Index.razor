@@ -1,8 +1,5 @@
 @page "/"
-@inject IConfiguration _configuration;
 @inject SiloService _siloService;
-@inject NavigationManager _navigationManager;
-@inject IJSRuntime JS
 
 <h1>Monitored Areas</h1>
 
@@ -16,7 +13,6 @@
                         <canvas id="canvas-@area.Name"></canvas>
                     </div>
                 </p>
-                <p class="card-text"><small class="text-muted">@area.Temperature.Fahrenheit.ToString("#.##") F / @area.Temperature.Celsius.ToString("#.##") C</small></p>
             </div>
         </div>
     }
