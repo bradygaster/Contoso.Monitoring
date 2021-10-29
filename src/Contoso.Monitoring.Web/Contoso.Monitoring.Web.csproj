@@ -12,7 +12,6 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.Orleans.OrleansProviders" Version="3.4.1" />
-        <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.7.0-alpha.21279.2" />
     </ItemGroup>
     
     <ItemGroup>
