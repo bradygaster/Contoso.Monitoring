@@ -1,11 +1,11 @@
 name: contoso.monitoring
 services:
-  - name: sensor
+  - name: sensors
     project: src/Contoso.Monitoring.Sensors.Temperature/Contoso.Monitoring.Sensors.Temperature.csproj
     replicas: 3
-  - name: silo
+  - name: back-end
     project: src/Contoso.Monitoring.Sensors.Silo/Contoso.Monitoring.Sensors.Silo.csproj
-  - name: web
+  - name: front-end
     project: src/Contoso.Monitoring.Web/Contoso.Monitoring.Web.csproj
     bindings:
       - protocol: https
