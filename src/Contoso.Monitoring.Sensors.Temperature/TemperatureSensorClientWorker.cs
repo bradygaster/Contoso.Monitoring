@@ -63,7 +63,7 @@ namespace Contoso.Monitoring.Sensors.Temperature
                 }
 
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(100, stoppingToken);
+                await Task.Delay(50, stoppingToken);
             }
         }
     }
