@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Contoso.Monitoring.Grains.Interfaces;
 using Microsoft.Extensions.Logging;
+using Orleans;
 using Orleans.Runtime;
 
 namespace Contoso.Monitoring.Grains
@@ -12,18 +13,23 @@ namespace Contoso.Monitoring.Grains
     {
         private ILogger<TemperatureSensorGrain> _logger;
         private IPersistentState<TemperatureSensorGrainState> _temperatureSensorGrainState;
+        private IBuildingDashboardGrain _buildingDashboardGrain;
+        private IGrainFactory _grainFactory;
 
         public TemperatureSensorGrain(ILogger<TemperatureSensorGrain> logger,
-            [PersistentState("temperatureSensorGrainState", "contosoMonitoringStore")] 
-            IPersistentState<TemperatureSensorGrainState> temperatureSensorGrainState)
+            [PersistentState("temperatureSensorGrainState", "contosoMonitoringStore")]
+            IPersistentState<TemperatureSensorGrainState> temperatureSensorGrainState,
+            IGrainFactory grainFactory)
         {
             _logger = logger;
             _temperatureSensorGrainState = temperatureSensorGrainState;
+            _grainFactory = grainFactory;
+            _buildingDashboardGrain = _grainFactory.GetGrain<IBuildingDashboardGrain>(Guid.Empty);
         }
 
         public Task<TemperatureReading> GetTemperature()
         {
-            if(_temperatureSensorGrainState.State.Readings.Any())
+            if (_temperatureSensorGrainState.State.Readings.Any())
             {
                 return Task.FromResult(_temperatureSensorGrainState.State.Readings.Last());
             }
@@ -31,12 +37,12 @@ namespace Contoso.Monitoring.Grains
             return null;
         }
 
-        public Task ReceiveTemperatureReading(TemperatureReading temperatureReading)
+        public async Task ReceiveTemperatureReading(TemperatureReading temperatureReading)
         {
+            await _buildingDashboardGrain.UpdateBuildingDashboard(temperatureReading);
             _logger.LogInformation($"Received {temperatureReading.Fahrenheit} from client {temperatureReading.SensorName} at {temperatureReading.Timestamp}.");
             _temperatureSensorGrainState.State.Readings.Add(temperatureReading);
             _logger.LogInformation($"Temperature sensor {temperatureReading.SensorName} currently has {_temperatureSensorGrainState.State.Readings.Count} records.");
-            return Task.FromResult(true);
         }
     }
 

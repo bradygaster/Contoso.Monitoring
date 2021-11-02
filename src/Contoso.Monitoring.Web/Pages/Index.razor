@@ -1,29 +1,30 @@
 @page "/"
+@inject SiloService _siloService;
 
 <h1>Monitored Areas</h1>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Temperature (Fahrenheit)</th>
-            <th>Temperature (Celsius)</th>
-        </tr>
-    </thead>
-    <tbody>
+<div class="card-columns">
     @foreach (var area in _areas)
     {
-        <tr>
-            <td>@area.Name</td>
-            <td>@area.Temperature.Fahrenheit.ToString("#")</td>
-            <td>@area.Temperature.Celsius.ToString("#")</td>
-        </tr>
+        <div class="card">
+            <div class="card-body">
+                <p class="card-text">
+                    <div id="chart-@area.Name">
+                        <canvas id="canvas-@area.Name"></canvas>
+                    </div>
+                </p>
+            </div>
+        </div>
     }
-    </tbody>
-</table>
+</div>
 
 @code
 {
     private List<MonitoredArea> _areas = new List<MonitoredArea>();
 
+    protected override async Task OnInitializedAsync()
+    {
+        _areas = await _siloService.GetMonitoredAreas();
+        _areas = _areas.OrderBy(_ => _.Name).ToList();
+    }
 }
