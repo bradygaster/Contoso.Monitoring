@@ -9,10 +9,4 @@ namespace Contoso.Monitoring.Grains.Interfaces
         Task MonitorArea(string areaName);
         Task<List<MonitoredArea>> GetMonitoredAreas();
     }
-
-    public class MonitoredArea
-    {
-        public string Name { get; set; }
-        public TemperatureReading Temperature { get; set; }
-    }
 }

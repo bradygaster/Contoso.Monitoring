@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Orleans.Hosting;
+using System.Net;
 
 namespace Contoso.Monitoring.Web
 {
@@ -27,8 +21,10 @@ namespace Contoso.Monitoring.Web
                     siloBuilder.UseLocalhostClustering(
                         siloPort: 11111 + _delta,
                         gatewayPort: 30000 + _delta,
-                        primarySiloEndpoint: new IPEndPoint(IPAddress.Loopback, 11111)
-                    );
+                        primarySiloEndpoint: new IPEndPoint(IPAddress.Loopback, 11111),
+                        serviceId: "ContosoMonitoring",
+                        clusterId: "dev"
+                    );;
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

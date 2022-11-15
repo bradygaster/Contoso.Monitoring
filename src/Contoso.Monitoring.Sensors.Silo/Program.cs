@@ -3,23 +3,20 @@ using Microsoft.Extensions.Hosting;
 using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
-using Contoso.Monitoring.Grains;
 
 await Host.CreateDefaultBuilder(args)
     .UseOrleans(siloBuilder =>
     {
         siloBuilder
-            .AddMemoryGrainStorage(name: "contosoMonitoringStore")
             .Configure<ClusterOptions>(options =>
                 {
                     options.ClusterId = "dev";
                     options.ServiceId = "ContosoMonitoring";
                 })
-            .UseLocalhostClustering();
+            .AddMemoryGrainStorageAsDefault()
+            .UseLocalhostClustering(siloPort: 11111, gatewayPort: 30000);
 
         siloBuilder
-            .ConfigureApplicationParts(applicationParts =>
-                applicationParts.AddApplicationPart(typeof(TemperatureSensorGrain).Assembly).WithReferences())
             .UseDashboard();
 
     }).RunConsoleAsync();

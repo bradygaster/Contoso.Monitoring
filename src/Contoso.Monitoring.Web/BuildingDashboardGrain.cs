@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Contoso.Monitoring.Grains.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Orleans;
+using System.Threading.Tasks;
 
 namespace Contoso.Monitoring.Web
 {

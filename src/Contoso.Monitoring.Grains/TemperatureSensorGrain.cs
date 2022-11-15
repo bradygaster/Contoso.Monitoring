@@ -17,8 +17,7 @@ namespace Contoso.Monitoring.Grains
         private IGrainFactory _grainFactory;
 
         public TemperatureSensorGrain(ILogger<TemperatureSensorGrain> logger,
-            [PersistentState("temperatureSensorGrainState", "contosoMonitoringStore")]
-            IPersistentState<TemperatureSensorGrainState> temperatureSensorGrainState,
+            [PersistentState(nameof(TemperatureSensorGrain))] IPersistentState<TemperatureSensorGrainState> temperatureSensorGrainState,
             IGrainFactory grainFactory)
         {
             _logger = logger;
