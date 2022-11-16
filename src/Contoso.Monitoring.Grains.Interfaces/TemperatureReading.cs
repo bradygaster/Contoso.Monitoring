@@ -1,6 +1,3 @@
-using Orleans;
-using System;
-
 namespace Contoso.Monitoring.Grains.Interfaces
 {
     [GenerateSerializer]

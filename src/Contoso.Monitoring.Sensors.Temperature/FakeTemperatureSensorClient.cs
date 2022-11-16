@@ -1,8 +1,6 @@
-using System;
+using Contoso.Monitoring.Grains.Interfaces;
 using System.Diagnostics;
 using System.Globalization;
-using System.Threading.Tasks;
-using Contoso.Monitoring.Grains.Interfaces;
 
 namespace Contoso.Monitoring.Sensors.Temperature
 {

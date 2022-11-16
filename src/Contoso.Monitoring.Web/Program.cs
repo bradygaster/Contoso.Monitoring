@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Orleans.Hosting;
 using System.Net;
 
 namespace Contoso.Monitoring.Web

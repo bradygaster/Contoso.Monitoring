@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Contoso.Monitoring.Grains.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 

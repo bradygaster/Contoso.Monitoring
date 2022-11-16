@@ -1,8 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Orleans.Hosting;
-using System.Threading.Tasks;
-
 namespace Contoso.Monitoring.Sensors.Temperature
 {
     public class Program

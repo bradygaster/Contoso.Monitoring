@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Contoso.Monitoring.Grains.Interfaces;
 using Microsoft.Extensions.Logging;
-using Orleans;
 using Orleans.Runtime;
 
 namespace Contoso.Monitoring.Grains
@@ -13,15 +8,12 @@ namespace Contoso.Monitoring.Grains
     {
         private readonly ILogger<MonitoredBuildingGrain> _logger;
         private readonly IPersistentState<MonitoredBuildingGrainState> _monitoredBuildingGrainState;
-        private readonly IGrainFactory _grainFactory;
 
         public MonitoredBuildingGrain(ILogger<MonitoredBuildingGrain> logger,
-            [PersistentState(nameof(MonitoredBuildingGrain))] IPersistentState<MonitoredBuildingGrainState> monitoredBuildingGrainState,
-            IGrainFactory grainFactory)
+            [PersistentState(nameof(MonitoredBuildingGrain))] IPersistentState<MonitoredBuildingGrainState> monitoredBuildingGrainState)
         {
             _logger = logger;
             _monitoredBuildingGrainState = monitoredBuildingGrainState;
-            _grainFactory = grainFactory;
         }
 
         public Task MonitorArea(string areaName)
@@ -37,7 +29,7 @@ namespace Contoso.Monitoring.Grains
         public async Task<MonitoredArea> GetMonitoredArea(string areaName) => new MonitoredArea
         {
             Name = areaName,
-            Temperature = await _grainFactory.GetGrain<ITemperatureSensorGrain>(areaName).GetTemperature()
+            Temperature = await GrainFactory.GetGrain<ITemperatureSensorGrain>(areaName).GetTemperature()
         };
 
         public async Task<List<MonitoredArea>> GetMonitoredAreas()
@@ -53,9 +45,10 @@ namespace Contoso.Monitoring.Grains
         }
     }
 
-    [Serializable]
+    [GenerateSerializer]
     public class MonitoredBuildingGrainState
     {
+        [Id(0)]
         public List<string> MonitoredAreaNames { get; set; } = new List<string>();
     }
 }

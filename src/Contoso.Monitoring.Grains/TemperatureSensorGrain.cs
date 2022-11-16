@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Contoso.Monitoring.Grains.Interfaces;
 using Microsoft.Extensions.Logging;
-using Orleans;
 using Orleans.Runtime;
 
 namespace Contoso.Monitoring.Grains
@@ -14,27 +9,19 @@ namespace Contoso.Monitoring.Grains
         private ILogger<TemperatureSensorGrain> _logger;
         private IPersistentState<TemperatureSensorGrainState> _temperatureSensorGrainState;
         private IBuildingDashboardGrain _buildingDashboardGrain;
-        private IGrainFactory _grainFactory;
 
         public TemperatureSensorGrain(ILogger<TemperatureSensorGrain> logger,
-            [PersistentState(nameof(TemperatureSensorGrain))] IPersistentState<TemperatureSensorGrainState> temperatureSensorGrainState,
-            IGrainFactory grainFactory)
+            [PersistentState(nameof(TemperatureSensorGrain))] IPersistentState<TemperatureSensorGrainState> temperatureSensorGrainState)
         {
             _logger = logger;
             _temperatureSensorGrainState = temperatureSensorGrainState;
-            _grainFactory = grainFactory;
-            _buildingDashboardGrain = _grainFactory.GetGrain<IBuildingDashboardGrain>(Guid.Empty);
+            _buildingDashboardGrain = GrainFactory.GetGrain<IBuildingDashboardGrain>(Guid.Empty);
         }
 
-        public Task<TemperatureReading> GetTemperature()
-        {
-            if (_temperatureSensorGrainState.State.Readings.Any())
-            {
-                return Task.FromResult(_temperatureSensorGrainState.State.Readings.Last());
-            }
-
-            return null;
-        }
+        public Task<TemperatureReading> GetTemperature() =>
+            _temperatureSensorGrainState.State.Readings.Any()
+                ? Task.FromResult(_temperatureSensorGrainState.State.Readings.Last())
+                : null;
 
         public async Task ReceiveTemperatureReading(TemperatureReading temperatureReading)
         {
@@ -45,9 +32,10 @@ namespace Contoso.Monitoring.Grains
         }
     }
 
-    [Serializable]
+    [GenerateSerializer]
     public class TemperatureSensorGrainState
     {
+        [Id(0)]
         public List<TemperatureReading> Readings { get; set; } = new List<TemperatureReading>();
     }
 }

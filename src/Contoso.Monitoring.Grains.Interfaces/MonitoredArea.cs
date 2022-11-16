@@ -1,6 +1,4 @@
-﻿using Orleans;
-
-namespace Contoso.Monitoring.Grains.Interfaces
+﻿namespace Contoso.Monitoring.Grains.Interfaces
 {
     [GenerateSerializer]
     public class MonitoredArea

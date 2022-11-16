@@ -1,10 +1,4 @@
 using Contoso.Monitoring.Grains.Interfaces;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Orleans;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Contoso.Monitoring.Sensors.Temperature
 {
