@@ -18,12 +18,15 @@ namespace Contoso.Monitoring.Grains
 
         public Task MonitorArea(string areaName)
         {
-            _logger.LogInformation($"Adding '{areaName}' to the list of monitored areas.");
-            _monitoredBuildingGrainState.State.MonitoredAreaNames.Remove(areaName);
-            _monitoredBuildingGrainState.State.MonitoredAreaNames.Add(areaName);
-            _logger.LogInformation($"Added '{areaName}' to the list of monitored areas.");
-            _logger.LogInformation("The list of area names now includes:");
-            _monitoredBuildingGrainState.State.MonitoredAreaNames.ForEach(_ => _logger.LogInformation(_));
+            if (!_monitoredBuildingGrainState.State.MonitoredAreaNames.Contains(areaName))
+            {
+                _logger.LogInformation($"Adding '{areaName}' to the list of monitored areas.");
+                _monitoredBuildingGrainState.State.MonitoredAreaNames.Add(areaName);
+                _logger.LogInformation("The list of area names now includes:");
+                _monitoredBuildingGrainState.State.MonitoredAreaNames.ForEach(_ => _logger.LogInformation(_));
+                _logger.LogInformation($"Added '{areaName}' to the list of monitored areas.");
+            }
+
             return Task.CompletedTask;
         }
         public async Task<MonitoredArea> GetMonitoredArea(string areaName) => new MonitoredArea
@@ -42,6 +45,22 @@ namespace Contoso.Monitoring.Grains
             }
 
             return result;
+        }
+
+        public async Task Subscribe(ITemperatureSensorGrainObserver observer)
+        {
+            foreach (var area in _monitoredBuildingGrainState.State.MonitoredAreaNames)
+            {
+                await GrainFactory.GetGrain<ITemperatureSensorGrain>(area).Subscribe(observer);
+            }
+        }
+
+        public async Task Unsubscribe(ITemperatureSensorGrainObserver observer)
+        {
+            foreach (var area in _monitoredBuildingGrainState.State.MonitoredAreaNames)
+            {
+                await GrainFactory.GetGrain<ITemperatureSensorGrain>(area).Unsubscribe(observer);
+            }
         }
     }
 

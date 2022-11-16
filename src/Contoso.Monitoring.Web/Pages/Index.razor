@@ -1,5 +1,5 @@
 @page "/"
-@inject SiloService _siloService;
+@inject IGrainFactory _grainFactory;
 
 <h1>Contoso Monitoring</h1>
 
@@ -24,7 +24,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _areas = await _siloService.GetMonitoredAreas();
+        _areas = await _grainFactory.GetGrain<IMonitoredBuildingGrain>(Guid.Empty).GetMonitoredAreas();
         _areas = _areas.OrderBy(_ => _.Name).ToList();
     }
 }

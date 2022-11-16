@@ -15,13 +15,15 @@ namespace Contoso.Monitoring.Web
             Host.CreateDefaultBuilder(args)
                 .UseOrleans((ctx, siloBuilder) =>
                 {
-                    siloBuilder.UseLocalhostClustering(
-                        siloPort: 11111 + _delta,
-                        gatewayPort: 30000 + _delta,
-                        primarySiloEndpoint: new IPEndPoint(IPAddress.Loopback, 11111),
-                        serviceId: "ContosoMonitoring",
-                        clusterId: "dev"
-                    );;
+                    siloBuilder
+                        .UseLocalhostClustering(
+                            siloPort: 11111 + _delta,
+                            gatewayPort: 30000 + _delta,
+                            primarySiloEndpoint: new IPEndPoint(IPAddress.Loopback, 11111),
+                            serviceId: "ContosoMonitoring",
+                            clusterId: "dev"
+                        )
+                        .AddMemoryGrainStorageAsDefault();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

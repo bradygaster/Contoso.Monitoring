@@ -2,5 +2,6 @@
 {
     public interface ITemperatureSensorGrainObserver : IGrainObserver
     {
+        Task OnTemperatureReadingReceived(TemperatureReading reading);
     }
 }

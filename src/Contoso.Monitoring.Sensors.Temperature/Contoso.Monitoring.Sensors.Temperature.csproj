@@ -12,7 +12,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Contoso.Monitoring.Grains.Interfaces\Contoso.Monitoring.Grains.Interfaces.csproj" />
-		<ProjectReference Include="..\Contoso.Monitoring.Grains\Contoso.Monitoring.Grains.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
