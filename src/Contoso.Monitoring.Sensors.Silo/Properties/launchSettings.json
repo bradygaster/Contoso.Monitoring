@@ -3,6 +3,8 @@
     "Contoso.Monitoring.Sensors.Silo": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
+      "launchBrowser": true,
+      "launchUrl": "localhost:8080",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       }

@@ -1,12 +1,11 @@
-using System;
-using System.Threading.Tasks;
-
 namespace Contoso.Monitoring.Grains.Interfaces
 {
-    public interface ITemperatureSensorGrain : Orleans.IGrainWithStringKey
+    public interface ITemperatureSensorGrain : IGrainWithStringKey
     {
         Task ReceiveTemperatureReading(TemperatureReading temperatureReading);
         Task<TemperatureReading> GetTemperature();
+        Task Subscribe(ITemperatureSensorGrainObserver observer);
+        Task Unsubscribe(ITemperatureSensorGrainObserver observer);
     }
 
     public static class TemperatureReadingConverter

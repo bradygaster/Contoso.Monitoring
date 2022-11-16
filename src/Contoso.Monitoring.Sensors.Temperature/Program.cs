@@ -1,13 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Orleans;
-using Orleans.Configuration;
-using Orleans.Hosting;
-
 namespace Contoso.Monitoring.Sensors.Temperature
 {
     public class Program
@@ -19,9 +9,13 @@ namespace Contoso.Monitoring.Sensors.Temperature
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseOrleansClient(client =>
+                {
+                    Task.Delay(5000).Wait();
+                    client.UseLocalhostClustering(gatewayPort: 30000, serviceId: "ContosoMonitoring", clusterId: "dev");
+                })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddSingleton<ContosoMonitoringClientService>();
                     services.AddSingleton<ITemperatureSensorClient, FakeTemperatureSensorClient>();
                     services.AddHostedService<TemperatureSensorClientWorker>();
                 });

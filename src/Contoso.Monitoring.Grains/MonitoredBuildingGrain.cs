@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Contoso.Monitoring.Grains.Interfaces;
 using Microsoft.Extensions.Logging;
-using Orleans;
 using Orleans.Runtime;
 
 namespace Contoso.Monitoring.Grains
@@ -13,32 +8,31 @@ namespace Contoso.Monitoring.Grains
     {
         private readonly ILogger<MonitoredBuildingGrain> _logger;
         private readonly IPersistentState<MonitoredBuildingGrainState> _monitoredBuildingGrainState;
-        private readonly IGrainFactory _grainFactory;
 
         public MonitoredBuildingGrain(ILogger<MonitoredBuildingGrain> logger,
-            [PersistentState("monitoredBuildingGrainState", "contosoMonitoringStore")]
-            IPersistentState<MonitoredBuildingGrainState> monitoredBuildingGrainState,
-            IGrainFactory grainFactory)
+            [PersistentState(nameof(MonitoredBuildingGrain))] IPersistentState<MonitoredBuildingGrainState> monitoredBuildingGrainState)
         {
             _logger = logger;
             _monitoredBuildingGrainState = monitoredBuildingGrainState;
-            _grainFactory = grainFactory;
         }
 
         public Task MonitorArea(string areaName)
         {
-            _logger.LogInformation($"Adding '{areaName}' to the list of monitored areas.");
-            _monitoredBuildingGrainState.State.MonitoredAreaNames.Remove(areaName);
-            _monitoredBuildingGrainState.State.MonitoredAreaNames.Add(areaName);
-            _logger.LogInformation($"Added '{areaName}' to the list of monitored areas.");
-            _logger.LogInformation("The list of area names now includes:");
-            _monitoredBuildingGrainState.State.MonitoredAreaNames.ForEach(_ => _logger.LogInformation(_));
+            if (!_monitoredBuildingGrainState.State.MonitoredAreaNames.Contains(areaName))
+            {
+                _logger.LogInformation($"Adding '{areaName}' to the list of monitored areas.");
+                _monitoredBuildingGrainState.State.MonitoredAreaNames.Add(areaName);
+                _logger.LogInformation("The list of area names now includes:");
+                _monitoredBuildingGrainState.State.MonitoredAreaNames.ForEach(_ => _logger.LogInformation(_));
+                _logger.LogInformation($"Added '{areaName}' to the list of monitored areas.");
+            }
+
             return Task.CompletedTask;
         }
         public async Task<MonitoredArea> GetMonitoredArea(string areaName) => new MonitoredArea
         {
             Name = areaName,
-            Temperature = await _grainFactory.GetGrain<ITemperatureSensorGrain>(areaName).GetTemperature()
+            Temperature = await GrainFactory.GetGrain<ITemperatureSensorGrain>(areaName).GetTemperature()
         };
 
         public async Task<List<MonitoredArea>> GetMonitoredAreas()
@@ -52,11 +46,28 @@ namespace Contoso.Monitoring.Grains
 
             return result;
         }
+
+        public async Task Subscribe(ITemperatureSensorGrainObserver observer)
+        {
+            foreach (var area in _monitoredBuildingGrainState.State.MonitoredAreaNames)
+            {
+                await GrainFactory.GetGrain<ITemperatureSensorGrain>(area).Subscribe(observer);
+            }
+        }
+
+        public async Task Unsubscribe(ITemperatureSensorGrainObserver observer)
+        {
+            foreach (var area in _monitoredBuildingGrainState.State.MonitoredAreaNames)
+            {
+                await GrainFactory.GetGrain<ITemperatureSensorGrain>(area).Unsubscribe(observer);
+            }
+        }
     }
 
-    [Serializable]
+    [GenerateSerializer]
     public class MonitoredBuildingGrainState
     {
+        [Id(0)]
         public List<string> MonitoredAreaNames { get; set; } = new List<string>();
     }
 }

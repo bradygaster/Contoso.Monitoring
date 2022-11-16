@@ -140,7 +140,7 @@ const connection = new signalR.HubConnectionBuilder()
     .build();
 
 window.onload = () => {
-    connection.on('ReceiveUpdate', (reading) => {
+    connection.on('OnTemperatureReadingReceived', (reading) => {
         window.addChartValue(reading.sensorName, reading.celsius, reading.fahrenheit);
     });
 

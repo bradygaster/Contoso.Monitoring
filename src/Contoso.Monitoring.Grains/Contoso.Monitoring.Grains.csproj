@@ -1,24 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+		<ImplicitUsings>true</ImplicitUsings>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Contoso.Monitoring.Grains.Interfaces\Contoso.Monitoring.Grains.Interfaces.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="microsoft.aspnetcore.signalr" Version="1.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.4.1">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Orleans.OrleansProviders" Version="3.4.1" />
-    <PackageReference Include="Microsoft.Orleans.Server" Version="3.4.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Contoso.Monitoring.Grains.Interfaces\Contoso.Monitoring.Grains.Interfaces.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="microsoft.aspnetcore.signalr" Version="1.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Orleans.Sdk" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Orleans.Runtime" Version="7.0.0" />
+	</ItemGroup>
 
 </Project>
