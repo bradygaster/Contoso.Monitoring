@@ -22,8 +22,6 @@ namespace Contoso.Monitoring.Grains
             {
                 _logger.LogInformation($"Adding '{areaName}' to the list of monitored areas.");
                 _monitoredBuildingGrainState.State.MonitoredAreaNames.Add(areaName);
-                _logger.LogInformation("The list of area names now includes:");
-                _monitoredBuildingGrainState.State.MonitoredAreaNames.ForEach(_ => _logger.LogInformation(_));
                 _logger.LogInformation($"Added '{areaName}' to the list of monitored areas.");
             }
 
