@@ -7,7 +7,9 @@ namespace Contoso.Monitoring.Grains
     {
         private ILogger<TemperatureSensorGrain> _logger;
         private IPersistentState<TemperatureSensorGrainState> _temperatureSensorGrainState;
-        private HashSet<ITemperatureSensorGrainObserver> _observers = new();
+        private HashSet<ITemperatureSensorReceivedReadingObserver> _observers = new();
+        private IDisposable _timer;
+        private ITemperatureSensorReceiveRequestObserver _temperatureSensorReceiveRequestObserver;
 
         public TemperatureSensorGrain(ILogger<TemperatureSensorGrain> logger,
             [PersistentState(nameof(TemperatureSensorGrain))] IPersistentState<TemperatureSensorGrainState> temperatureSensorGrainState)
@@ -22,6 +24,9 @@ namespace Contoso.Monitoring.Grains
             var sensorName = grainId.Key.ToString();
             var lastKnown = await GrainFactory.GetGrain<ISensorRegistryGrain>(Guid.Empty).GetSensorReading(sensorName);
 
+            _timer?.Dispose();
+            _timer = RegisterTimer(async _ => await RequestReadingFromClient(), null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
+
             await base.OnActivateAsync(cancellationToken);
         }
 
@@ -29,6 +34,16 @@ namespace Contoso.Monitoring.Grains
             _temperatureSensorGrainState.State.Readings.Any()
                 ? Task.FromResult(_temperatureSensorGrainState.State.Readings.Last())
                 : null;
+
+        public async Task RequestReadingFromClient()
+        {
+            if (_temperatureSensorReceiveRequestObserver != null)
+            {
+                _logger.LogInformation($"Requesting temperature from sensor {this.GetGrainId().Key} at {DateTime.UtcNow}.");
+                var reading = await _temperatureSensorReceiveRequestObserver.GetTemperatureReading();
+                await ReceiveTemperatureReading(reading);
+            }
+        }
 
         public async Task ReceiveTemperatureReading(TemperatureSensor temperatureReading)
         {
@@ -40,7 +55,7 @@ namespace Contoso.Monitoring.Grains
             {
                 try
                 { 
-                    observer.OnTemperatureReadingReceived(temperatureReading);
+                    await observer.OnTemperatureReadingReceived(temperatureReading);
                 }
                 catch (Exception ex)
                 {
@@ -49,17 +64,29 @@ namespace Contoso.Monitoring.Grains
             }
         }
 
-        public Task Subscribe(ITemperatureSensorGrainObserver observer)
+        public Task Subscribe(ITemperatureSensorReceivedReadingObserver observer)
         {
             if (!_observers.Contains(observer))
                 _observers.Add(observer);
             return Task.CompletedTask;
         }
 
-        public Task Unsubscribe(ITemperatureSensorGrainObserver observer)
+        public Task Unsubscribe(ITemperatureSensorReceivedReadingObserver observer)
         {
             if (_observers.Contains(observer))
                 _observers.Remove(observer);
+            return Task.CompletedTask;
+        }
+
+        public Task ListenForRequests(ITemperatureSensorReceiveRequestObserver observer)
+        {
+            _temperatureSensorReceiveRequestObserver = observer;
+            return Task.CompletedTask;
+        }
+
+        public Task StopListeningForRequests()
+        {
+            _temperatureSensorReceiveRequestObserver = null;
             return Task.CompletedTask;
         }
     }

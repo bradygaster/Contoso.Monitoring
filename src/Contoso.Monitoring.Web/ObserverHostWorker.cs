@@ -5,10 +5,10 @@ namespace Contoso.Monitoring.Web
     public class ObserverHostWorker : BackgroundService
     {
         private IGrainFactory _grainFactory;
-        private ITemperatureSensorGrainObserver _temperatureSensorObserver;
-        private ITemperatureSensorGrainObserver _temperatureSensorObserverRef;
+        private ITemperatureSensorReceivedReadingObserver _temperatureSensorObserver;
+        private ITemperatureSensorReceivedReadingObserver _temperatureSensorObserverRef;
 
-        public ObserverHostWorker(IGrainFactory grainFactory, ITemperatureSensorGrainObserver temperatureSensorObserver)
+        public ObserverHostWorker(IGrainFactory grainFactory, ITemperatureSensorReceivedReadingObserver temperatureSensorObserver)
         {
             _grainFactory = grainFactory;
             _temperatureSensorObserver = temperatureSensorObserver;
@@ -19,7 +19,7 @@ namespace Contoso.Monitoring.Web
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            _temperatureSensorObserverRef = _grainFactory.CreateObjectReference<ITemperatureSensorGrainObserver>(_temperatureSensorObserver);
+            _temperatureSensorObserverRef = _grainFactory.CreateObjectReference<ITemperatureSensorReceivedReadingObserver>(_temperatureSensorObserver);
             await _grainFactory.GetGrain<ISensorRegistryGrain>(Guid.Empty).Subscribe(_temperatureSensorObserverRef);
             await base.StartAsync(cancellationToken);
         }

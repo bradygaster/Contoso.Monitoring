@@ -1,3 +1,5 @@
+using Contoso.Monitoring.Grains;
+
 namespace Contoso.Monitoring.Sensors.Temperature
 {
     public class Program
@@ -16,7 +18,7 @@ namespace Contoso.Monitoring.Sensors.Temperature
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddSingleton<ITemperatureSensorClient, FakeTemperatureSensorClient>();
+                    services.AddSingleton<ITemperatureSensorReceiveRequestObserver, FakeTemperatureSensorClient>();
                     services.AddHostedService<TemperatureSensorClientWorker>();
                 });
     }

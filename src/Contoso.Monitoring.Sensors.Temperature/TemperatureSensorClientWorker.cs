@@ -2,16 +2,16 @@ using Contoso.Monitoring.Grains;
 
 namespace Contoso.Monitoring.Sensors.Temperature
 {
-    public class TemperatureSensorClientWorker : BackgroundService
+    public class TemperatureSensorClientWorker : IHostedService
     {
         private readonly ILogger<TemperatureSensorClientWorker> _logger;
-        private readonly ITemperatureSensorClient _temperatureSensorClient;
+        private readonly ITemperatureSensorReceiveRequestObserver _temperatureSensorClient;
         private readonly IGrainFactory _grainFactory;
+        private ITemperatureSensorReceiveRequestObserver _temperatureSensorClientRef;
         private ITemperatureSensorGrain _temperatureSensorGrain;
-        private ISensorRegistryGrain _monitoredBuildingGrain;
 
         public TemperatureSensorClientWorker(ILogger<TemperatureSensorClientWorker> logger,
-            ITemperatureSensorClient temperatureSensorClient,
+            ITemperatureSensorReceiveRequestObserver temperatureSensorClient,
             IGrainFactory grainFactory)
         {
             _logger = logger;
@@ -19,27 +19,20 @@ namespace Contoso.Monitoring.Sensors.Temperature
             _grainFactory = grainFactory;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                try
-                {
-                    // get the temperature
-                    var reading = await _temperatureSensorClient.GetTemperatureReading();
+            _logger.LogInformation("Worker starting at: {time}", DateTimeOffset.Now);
+            var reading = await _temperatureSensorClient.GetTemperatureReading();
 
-                    // get the temp sensor grain
-                    _temperatureSensorGrain ??= _grainFactory.GetGrain<ITemperatureSensorGrain>(reading.SensorName);
-                    await _temperatureSensorGrain.ReceiveTemperatureReading(reading);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Error getting grain.");
-                }
+            _temperatureSensorClientRef = _grainFactory.CreateObjectReference<ITemperatureSensorReceiveRequestObserver>(_temperatureSensorClient);
+            _temperatureSensorGrain ??= _grainFactory.GetGrain<ITemperatureSensorGrain>(reading.SensorName);
+            await _temperatureSensorGrain.ListenForRequests(_temperatureSensorClientRef);
+        }
 
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(100, stoppingToken);
-            }
+        public async Task StopAsync(CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Worker stopping at: {time}", DateTimeOffset.Now);
+            await _temperatureSensorGrain.StopListeningForRequests();
         }
     }
 }

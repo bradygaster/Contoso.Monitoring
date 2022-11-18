@@ -4,7 +4,7 @@ namespace Contoso.Monitoring.Grains
     {
         Task<TemperatureSensor> GetSensorReading(string areaName);
         Task<List<TemperatureSensor>> GetSensors();
-        Task Subscribe(ITemperatureSensorGrainObserver observer);
-        Task Unsubscribe(ITemperatureSensorGrainObserver observer);
+        Task Subscribe(ITemperatureSensorReceivedReadingObserver observer);
+        Task Unsubscribe(ITemperatureSensorReceivedReadingObserver observer);
     }
 }

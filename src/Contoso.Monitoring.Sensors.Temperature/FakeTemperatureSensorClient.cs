@@ -1,10 +1,11 @@
-using Contoso.Monitoring.Grains;
+using System;
 using System.Diagnostics;
 using System.Globalization;
+using Contoso.Monitoring.Grains;
 
 namespace Contoso.Monitoring.Sensors.Temperature
 {
-    public class FakeTemperatureSensorClient : ITemperatureSensorClient
+    public class FakeTemperatureSensorClient : ITemperatureSensorReceiveRequestObserver
     {
         // Min temperature, max temperature, min duration of a temperature swing in seconds, and max of that.
         private const double MinVal = 50;
@@ -20,8 +21,9 @@ namespace Contoso.Monitoring.Sensors.Temperature
         private double _phaseStartTemp;
         private double _phaseEndTemp;
         private double _phaseDurationSeconds;
+        private readonly ILogger<FakeTemperatureSensorClient> _logger;
 
-        public FakeTemperatureSensorClient()
+        public FakeTemperatureSensorClient(ILogger<FakeTemperatureSensorClient> logger)
         {
             _randomSensorName = string.Concat(
                 _rnd.Next(1, 9).ToString(CultureInfo.CurrentCulture),
@@ -30,16 +32,18 @@ namespace Contoso.Monitoring.Sensors.Temperature
             );
 
             StartNewPhase();
+            _logger = logger;
         }
 
         public Task<TemperatureSensor> GetTemperatureReading()
         {
+            _logger.LogInformation($"Sensor {_randomSensorName} getting temperature.");
             UpdateTemperatureReading();
+            _logger.LogInformation($"Sensor {_randomSensorName} returning temperature.");
 
             return Task.FromResult(new TemperatureSensor
             {
                 SensorName = _randomSensorName,
-                Timestamp = DateTime.Now,
                 Fahrenheit = _currentValue,
                 Celsius = TemperatureReadingConverter.ToCelsius(_currentValue)
             });

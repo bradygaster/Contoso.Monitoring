@@ -16,7 +16,7 @@ namespace Contoso.Monitoring.Web
             services.AddSignalR();
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<ITemperatureSensorGrainObserver, TemperatureSensorGrainObserver>();
+            services.AddSingleton<ITemperatureSensorReceivedReadingObserver, TemperatureSensorReceivedReadingObserver>();
             services.AddHostedService<ObserverHostWorker>();
         }
 

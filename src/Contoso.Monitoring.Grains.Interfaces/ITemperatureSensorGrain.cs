@@ -4,8 +4,10 @@ namespace Contoso.Monitoring.Grains
     {
         Task ReceiveTemperatureReading(TemperatureSensor temperatureReading);
         Task<TemperatureSensor> GetTemperature();
-        Task Subscribe(ITemperatureSensorGrainObserver observer);
-        Task Unsubscribe(ITemperatureSensorGrainObserver observer);
+        Task Subscribe(ITemperatureSensorReceivedReadingObserver observer);
+        Task Unsubscribe(ITemperatureSensorReceivedReadingObserver observer);
+        Task ListenForRequests(ITemperatureSensorReceiveRequestObserver observer);
+        Task StopListeningForRequests();
     }
 
     public static class TemperatureReadingConverter

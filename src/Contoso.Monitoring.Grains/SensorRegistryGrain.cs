@@ -37,14 +37,14 @@ namespace Contoso.Monitoring.Grains
             return sensors.ToList();
         }
 
-        public async Task Subscribe(ITemperatureSensorGrainObserver observer)
+        public async Task Subscribe(ITemperatureSensorReceivedReadingObserver observer)
         {
             var sensors = await GetSensors();
             var tasks = sensors.Select(async x => await GrainFactory.GetGrain<ITemperatureSensorGrain>(x.SensorName).Subscribe(observer));
             await Task.WhenAll(tasks);
         }
 
-        public async Task Unsubscribe(ITemperatureSensorGrainObserver observer)
+        public async Task Unsubscribe(ITemperatureSensorReceivedReadingObserver observer)
         {
             var sensors = await GetSensors();
             var tasks = sensors.Select(async x => await GrainFactory.GetGrain<ITemperatureSensorGrain>(x.SensorName).Unsubscribe(observer));

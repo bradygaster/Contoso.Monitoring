@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace Contoso.Monitoring.Web
 {
-    public class BuildingMonitorHub : Hub<ITemperatureSensorGrainObserver>
+    public class BuildingMonitorHub : Hub<ITemperatureSensorReceivedReadingObserver>
     {
     }
 }
