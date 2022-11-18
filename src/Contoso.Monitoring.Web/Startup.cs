@@ -1,4 +1,4 @@
-using Contoso.Monitoring.Grains.Interfaces;
+using Contoso.Monitoring.Grains;
 
 namespace Contoso.Monitoring.Web
 {

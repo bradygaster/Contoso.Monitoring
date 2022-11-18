@@ -1,9 +1,8 @@
-using Contoso.Monitoring.Grains.Interfaces;
 using Microsoft.Extensions.Logging;
 using Orleans.Runtime;
 
 namespace Contoso.Monitoring.Grains
-{
+{ 
     public class TemperatureSensorGrain : Grain, ITemperatureSensorGrain
     {
         private ILogger<TemperatureSensorGrain> _logger;
@@ -17,12 +16,12 @@ namespace Contoso.Monitoring.Grains
             _temperatureSensorGrainState = temperatureSensorGrainState;
         }
 
-        public Task<TemperatureReading> GetTemperature() =>
+        public Task<TemperatureSensor> GetTemperature() =>
             _temperatureSensorGrainState.State.Readings.Any()
                 ? Task.FromResult(_temperatureSensorGrainState.State.Readings.Last())
                 : null;
 
-        public async Task ReceiveTemperatureReading(TemperatureReading temperatureReading)
+        public async Task ReceiveTemperatureReading(TemperatureSensor temperatureReading)
         {
             _logger.LogInformation($"Received {temperatureReading.Fahrenheit} from client {temperatureReading.SensorName} at {temperatureReading.Timestamp}.");
             _temperatureSensorGrainState.State.Readings.Add(temperatureReading);
@@ -30,7 +29,14 @@ namespace Contoso.Monitoring.Grains
 
             foreach (var observer in _observers)
             {
-                await observer.OnTemperatureReadingReceived(temperatureReading);
+                try
+                { 
+                    await observer.OnTemperatureReadingReceived(temperatureReading);
+                }
+                catch (Exception ex)
+                {
+                    _observers.Remove(observer);
+                }
             }
         }
 
@@ -53,6 +59,6 @@ namespace Contoso.Monitoring.Grains
     public class TemperatureSensorGrainState
     {
         [Id(0)]
-        public List<TemperatureReading> Readings { get; set; } = new List<TemperatureReading>();
+        public List<TemperatureSensor> Readings { get; set; } = new List<TemperatureSensor>();
     }
 }

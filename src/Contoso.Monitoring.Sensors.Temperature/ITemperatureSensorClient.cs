@@ -1,9 +1,9 @@
-using Contoso.Monitoring.Grains.Interfaces;
+using Contoso.Monitoring.Grains;
 
 namespace Contoso.Monitoring.Sensors.Temperature
 {
     public interface ITemperatureSensorClient
     {
-        Task<TemperatureReading> GetTemperatureReading();
+        Task<TemperatureSensor> GetTemperatureReading();
     }
 }

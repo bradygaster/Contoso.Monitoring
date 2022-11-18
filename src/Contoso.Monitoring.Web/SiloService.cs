@@ -1,4 +1,4 @@
-using Contoso.Monitoring.Grains.Interfaces;
+using Contoso.Monitoring.Grains;
 
 namespace Contoso.Monitoring.Web
 {
@@ -13,20 +13,20 @@ namespace Contoso.Monitoring.Web
             _temperatureSensorObserver = temperatureSensorObserver;
         }
 
-        public async Task<List<MonitoredArea>> GetMonitoredAreas()
-            => await _grainFactory.GetGrain<IMonitoredBuildingGrain>(Guid.Empty).GetMonitoredAreas();
+        public async Task<List<TemperatureSensor>> GetSensors()
+            => await _grainFactory.GetGrain<ISensorRegistryGrain>(Guid.Empty).GetSensors();
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
             var reference = _grainFactory.CreateObjectReference<ITemperatureSensorGrainObserver>(_temperatureSensorObserver);
-            await _grainFactory.GetGrain<IMonitoredBuildingGrain>(Guid.Empty).Subscribe(reference);
+            await _grainFactory.GetGrain<ISensorRegistryGrain>(Guid.Empty).Subscribe(reference);
             await base.StartAsync(cancellationToken);
         }
 
         public override async Task StopAsync(CancellationToken cancellationToken)
         {
             var reference = _grainFactory.CreateObjectReference<ITemperatureSensorGrainObserver>(_temperatureSensorObserver);
-            await _grainFactory.GetGrain<IMonitoredBuildingGrain>(Guid.Empty).Unsubscribe(reference);
+            await _grainFactory.GetGrain<ISensorRegistryGrain>(Guid.Empty).Unsubscribe(reference);
             await base.StopAsync(cancellationToken);
         }
 
@@ -35,7 +35,7 @@ namespace Contoso.Monitoring.Web
             while (!stoppingToken.IsCancellationRequested)
             {
                 var reference = _grainFactory.CreateObjectReference<ITemperatureSensorGrainObserver>(_temperatureSensorObserver);
-                await _grainFactory.GetGrain<IMonitoredBuildingGrain>(Guid.Empty).Subscribe(reference);
+                await _grainFactory.GetGrain<ISensorRegistryGrain>(Guid.Empty).Subscribe(reference);
 
                 await Task.Delay(1000);
             }

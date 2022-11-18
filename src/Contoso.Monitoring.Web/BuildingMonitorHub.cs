@@ -1,4 +1,4 @@
-using Contoso.Monitoring.Grains.Interfaces;
+using Contoso.Monitoring.Grains;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Contoso.Monitoring.Web

@@ -1,7 +1,7 @@
-﻿namespace Contoso.Monitoring.Grains.Interfaces
+﻿namespace Contoso.Monitoring.Grains
 {
     public interface ITemperatureSensorGrainObserver : IGrainObserver
     {
-        Task OnTemperatureReadingReceived(TemperatureReading reading);
+        Task OnTemperatureReadingReceived(TemperatureSensor reading);
     }
 }

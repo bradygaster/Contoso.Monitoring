@@ -1,4 +1,4 @@
-using Contoso.Monitoring.Grains.Interfaces;
+using Contoso.Monitoring.Grains;
 
 namespace Contoso.Monitoring.Sensors.Temperature
 {
@@ -8,7 +8,7 @@ namespace Contoso.Monitoring.Sensors.Temperature
         private readonly ITemperatureSensorClient _temperatureSensorClient;
         private readonly IGrainFactory _grainFactory;
         private ITemperatureSensorGrain _temperatureSensorGrain;
-        private IMonitoredBuildingGrain _monitoredBuildingGrain;
+        private ISensorRegistryGrain _monitoredBuildingGrain;
 
         public TemperatureSensorClientWorker(ILogger<TemperatureSensorClientWorker> logger,
             ITemperatureSensorClient temperatureSensorClient,
@@ -31,10 +31,6 @@ namespace Contoso.Monitoring.Sensors.Temperature
                     // get the temp sensor grain
                     _temperatureSensorGrain ??= _grainFactory.GetGrain<ITemperatureSensorGrain>(reading.SensorName);
                     await _temperatureSensorGrain.ReceiveTemperatureReading(reading);
-
-                    // get the monitored building grain
-                    _monitoredBuildingGrain ??= _grainFactory.GetGrain<IMonitoredBuildingGrain>(Guid.Empty);
-                    await _monitoredBuildingGrain.MonitorArea(reading.SensorName);
                 }
                 catch (Exception ex)
                 {
