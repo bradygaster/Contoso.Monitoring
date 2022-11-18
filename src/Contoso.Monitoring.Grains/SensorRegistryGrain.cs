@@ -22,29 +22,19 @@ namespace Contoso.Monitoring.Grains
                 _logger.LogInformation($"Adding '{areaName}' to the list of monitored areas.");
                 _monitoredBuildingGrainState.State.MonitoredAreaNames.Add(areaName);
                 _logger.LogInformation($"Added '{areaName}' to the list of monitored areas.");
+                return new TemperatureSensor { SensorName = areaName, Timestamp = DateTime.UtcNow };
             }
-
-            return await GrainFactory.GetGrain<ITemperatureSensorGrain>(areaName).GetTemperature();
+            else
+            {
+                return await GrainFactory.GetGrain<ITemperatureSensorGrain>(areaName).GetTemperature();
+            }
         }
 
         public async Task<List<TemperatureSensor>> GetSensors()
         {
-            var sensorGrains = (await 
-                    GrainFactory
-                        .GetGrain<IManagementGrain>(0)
-                            .GetDetailedGrainStatistics())
-                            .Where(x 
-                                => x.GrainType.Contains("TemperatureSensorGrain"))
-                            .ToList();
-
-            var result = new List<TemperatureSensor>();
-            foreach (var sensor in sensorGrains)
-            {
-                var id = sensor.GrainId.Key.ToString();
-                result.Add(await GetSensorReading(id));
-            }
-
-            return result;
+            var tasks = _monitoredBuildingGrainState.State.MonitoredAreaNames.Select(async _ => await GetSensorReading(_));
+            var sensors = await Task.WhenAll(tasks);
+            return sensors.ToList();
         }
 
         public async Task Subscribe(ITemperatureSensorGrainObserver observer)
@@ -61,19 +51,11 @@ namespace Contoso.Monitoring.Grains
             await Task.WhenAll(tasks);
         }
 
-        //public async Task Subscribe(ITemperatureSensorGrainObserver observer)
-        //    => _monitoredBuildingGrainState.State.MonitoredAreaNames.ForEach(async _ =>
-        //        await GrainFactory.GetGrain<ITemperatureSensorGrain>(_).Subscribe(observer));
-
-        //public async Task Unsubscribe(ITemperatureSensorGrainObserver observer)
-        //    => _monitoredBuildingGrainState.State.MonitoredAreaNames.ForEach(async _ =>
-        //        await GrainFactory.GetGrain<ITemperatureSensorGrain>(_).Unsubscribe(observer));
-    }
-
-    [GenerateSerializer]
-    public class MonitoredBuildingGrainState
-    {
-        [Id(0)]
-        public List<string> MonitoredAreaNames { get; set; } = new List<string>();
+        [GenerateSerializer]
+        public class MonitoredBuildingGrainState
+        {
+            [Id(0)]
+            public List<string> MonitoredAreaNames { get; set; } = new List<string>();
+        }
     }
 }

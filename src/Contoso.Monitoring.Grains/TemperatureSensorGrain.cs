@@ -16,6 +16,15 @@ namespace Contoso.Monitoring.Grains
             _temperatureSensorGrainState = temperatureSensorGrainState;
         }
 
+        public override async Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            var grainId = this.GetGrainId();
+            var sensorName = grainId.Key.ToString();
+            var lastKnown = await GrainFactory.GetGrain<ISensorRegistryGrain>(Guid.Empty).GetSensorReading(sensorName);
+
+            await base.OnActivateAsync(cancellationToken);
+        }
+
         public Task<TemperatureSensor> GetTemperature() =>
             _temperatureSensorGrainState.State.Readings.Any()
                 ? Task.FromResult(_temperatureSensorGrainState.State.Readings.Last())
