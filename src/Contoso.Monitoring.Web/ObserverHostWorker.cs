@@ -6,6 +6,7 @@ namespace Contoso.Monitoring.Web
     {
         private IGrainFactory _grainFactory;
         private ITemperatureSensorGrainObserver _temperatureSensorObserver;
+        private ITemperatureSensorGrainObserver _temperatureSensorObserverRef;
 
         public ObserverHostWorker(IGrainFactory grainFactory, ITemperatureSensorGrainObserver temperatureSensorObserver)
         {
@@ -18,15 +19,14 @@ namespace Contoso.Monitoring.Web
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            var reference = _grainFactory.CreateObjectReference<ITemperatureSensorGrainObserver>(_temperatureSensorObserver);
-            await _grainFactory.GetGrain<ISensorRegistryGrain>(Guid.Empty).Subscribe(reference);
+            _temperatureSensorObserverRef = _grainFactory.CreateObjectReference<ITemperatureSensorGrainObserver>(_temperatureSensorObserver);
+            await _grainFactory.GetGrain<ISensorRegistryGrain>(Guid.Empty).Subscribe(_temperatureSensorObserverRef);
             await base.StartAsync(cancellationToken);
         }
 
         public override async Task StopAsync(CancellationToken cancellationToken)
         {
-            var reference = _grainFactory.CreateObjectReference<ITemperatureSensorGrainObserver>(_temperatureSensorObserver);
-            await _grainFactory.GetGrain<ISensorRegistryGrain>(Guid.Empty).Unsubscribe(reference);
+            await _grainFactory.GetGrain<ISensorRegistryGrain>(Guid.Empty).Unsubscribe(_temperatureSensorObserverRef);
             await base.StopAsync(cancellationToken);
         }
 
@@ -34,9 +34,7 @@ namespace Contoso.Monitoring.Web
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var reference = _grainFactory.CreateObjectReference<ITemperatureSensorGrainObserver>(_temperatureSensorObserver);
-                await _grainFactory.GetGrain<ISensorRegistryGrain>(Guid.Empty).Subscribe(reference);
-
+                await _grainFactory.GetGrain<ISensorRegistryGrain>(Guid.Empty).Subscribe(_temperatureSensorObserverRef);
                 await Task.Delay(1000);
             }
         }
