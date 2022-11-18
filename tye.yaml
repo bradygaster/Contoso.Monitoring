@@ -2,7 +2,7 @@ name: contoso.monitoring
 services:
   - name: sensors
     project: src/Contoso.Monitoring.Sensors.Temperature/Contoso.Monitoring.Sensors.Temperature.csproj
-    replicas: 3
+    replicas: 10
   - name: back-end
     project: src/Contoso.Monitoring.Sensors.Silo/Contoso.Monitoring.Sensors.Silo.csproj
   - name: front-end

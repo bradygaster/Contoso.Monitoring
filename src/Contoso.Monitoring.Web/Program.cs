@@ -1,5 +1,3 @@
-using System.Net;
-
 namespace Contoso.Monitoring.Web
 {
     public class Program
@@ -13,17 +11,10 @@ namespace Contoso.Monitoring.Web
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseOrleans((ctx, siloBuilder) =>
+                .UseOrleansClient(client =>
                 {
-                    siloBuilder
-                        .UseLocalhostClustering(
-                            siloPort: 11111 + _delta,
-                            gatewayPort: 30000 + _delta,
-                            primarySiloEndpoint: new IPEndPoint(IPAddress.Loopback, 11111),
-                            serviceId: "ContosoMonitoring",
-                            clusterId: "dev"
-                        )
-                        .AddMemoryGrainStorageAsDefault();
+                    Task.Delay(5000).Wait();
+                    client.UseLocalhostClustering(gatewayPort: 30000, serviceId: "ContosoMonitoring", clusterId: "dev");
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

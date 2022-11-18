@@ -31,7 +31,7 @@ namespace Contoso.Monitoring.Grains
             {
                 try
                 { 
-                    await observer.OnTemperatureReadingReceived(temperatureReading);
+                    observer.OnTemperatureReadingReceived(temperatureReading);
                 }
                 catch (Exception ex)
                 {

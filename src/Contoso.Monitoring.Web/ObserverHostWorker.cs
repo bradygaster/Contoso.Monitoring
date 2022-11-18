@@ -2,12 +2,12 @@ using Contoso.Monitoring.Grains;
 
 namespace Contoso.Monitoring.Web
 {
-    public class SiloService : BackgroundService
+    public class ObserverHostWorker : BackgroundService
     {
         private IGrainFactory _grainFactory;
         private ITemperatureSensorGrainObserver _temperatureSensorObserver;
 
-        public SiloService(IGrainFactory grainFactory, ITemperatureSensorGrainObserver temperatureSensorObserver)
+        public ObserverHostWorker(IGrainFactory grainFactory, ITemperatureSensorGrainObserver temperatureSensorObserver)
         {
             _grainFactory = grainFactory;
             _temperatureSensorObserver = temperatureSensorObserver;

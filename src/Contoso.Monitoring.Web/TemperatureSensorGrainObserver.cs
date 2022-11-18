@@ -24,7 +24,10 @@ namespace Contoso.Monitoring.Web
         public int GetHashCode([DisallowNull] ITemperatureSensorGrainObserver obj)
             => (obj as TemperatureSensorGrainObserver).MachineName.ToLower().GetHashCode();
 
-        public async Task OnTemperatureReadingReceived(TemperatureSensor reading)
-            => await _hub.Clients.All.OnTemperatureReadingReceived(reading);
+        public Task OnTemperatureReadingReceived(TemperatureSensor reading)
+        {
+            _hub.Clients.All.OnTemperatureReadingReceived(reading);
+            return Task.CompletedTask;
+        }
     }
 }
