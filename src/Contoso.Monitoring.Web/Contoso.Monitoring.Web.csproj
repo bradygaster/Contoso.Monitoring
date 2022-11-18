@@ -8,12 +8,11 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Orleans.Server" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Orleans.Client" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Contoso.Monitoring.Grains.Interfaces\Contoso.Monitoring.Grains.Interfaces.csproj" />
-		<ProjectReference Include="..\Contoso.Monitoring.Grains\Contoso.Monitoring.Grains.csproj" />
 	</ItemGroup>
 
 </Project>

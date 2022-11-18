@@ -1,16 +1,17 @@
 @page "/"
+@using Contoso.Monitoring.Grains;
 @inject IGrainFactory _grainFactory;
 
 <h1>Contoso Monitoring</h1>
 
 <div class="card-columns">
-    @foreach (var area in _areas)
+    @foreach (var sensor in _sensors)
     {
         <div class="card">
             <div class="card-body">
                 <p class="card-text">
-                    <div id="chart-@area.Name">
-                        <canvas id="canvas-@area.Name"></canvas>
+                    <div id="chart-@sensor.SensorName">
+                        <canvas id="canvas-@sensor.SensorName"></canvas>
                     </div>
                 </p>
             </div>
@@ -20,11 +21,11 @@
 
 @code
 {
-    private List<MonitoredArea> _areas = new List<MonitoredArea>();
+    private List<TemperatureSensor> _sensors = new List<TemperatureSensor>();
 
     protected override async Task OnInitializedAsync()
     {
-        _areas = await _grainFactory.GetGrain<IMonitoredBuildingGrain>(Guid.Empty).GetMonitoredAreas();
-        _areas = _areas.OrderBy(_ => _.Name).ToList();
+        _sensors = await _grainFactory.GetGrain<ISensorRegistryGrain>(Guid.Empty).GetSensors();
+        _sensors = _sensors.OrderBy(_ => _.SensorName).ToList();
     }
 }

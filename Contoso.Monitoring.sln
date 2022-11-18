@@ -17,6 +17,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contoso.Monitoring.Web", "s
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7DBDEAB8-60ED-4E7D-A852-C061370BC71D}"
 	ProjectSection(SolutionItems) = preProject
+		docs\01-setup.md = docs\01-setup.md
+		docs\02-orleans-grains.md = docs\02-orleans-grains.md
+		docs\03-hosting-grains.md = docs\03-hosting-grains.md
+		docs\04-run-blazor-web-app.md = docs\04-run-blazor-web-app.md
+		docs\05-temperature-worker-service.md = docs\05-temperature-worker-service.md
+		docs\final.md = docs\final.md
+		docs\question01.md = docs\question01.md
+		docs\question02.md = docs\question02.md
+		readme.md = readme.md
 		tye.yaml = tye.yaml
 	EndProjectSection
 EndProject

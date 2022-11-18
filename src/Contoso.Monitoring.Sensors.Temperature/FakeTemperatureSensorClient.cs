@@ -1,4 +1,4 @@
-using Contoso.Monitoring.Grains.Interfaces;
+using Contoso.Monitoring.Grains;
 using System.Diagnostics;
 using System.Globalization;
 
@@ -32,13 +32,14 @@ namespace Contoso.Monitoring.Sensors.Temperature
             StartNewPhase();
         }
 
-        public Task<TemperatureReading> GetTemperatureReading()
+        public Task<TemperatureSensor> GetTemperatureReading()
         {
             UpdateTemperatureReading();
 
-            return Task.FromResult(new TemperatureReading
+            return Task.FromResult(new TemperatureSensor
             {
                 SensorName = _randomSensorName,
+                Timestamp = DateTime.Now,
                 Fahrenheit = _currentValue,
                 Celsius = TemperatureReadingConverter.ToCelsius(_currentValue)
             });

@@ -1,17 +1,17 @@
-namespace Contoso.Monitoring.Grains.Interfaces
+namespace Contoso.Monitoring.Grains
 {
     public interface ITemperatureSensorGrain : IGrainWithStringKey
     {
-        Task ReceiveTemperatureReading(TemperatureReading temperatureReading);
-        Task<TemperatureReading> GetTemperature();
+        Task ReceiveTemperatureReading(TemperatureSensor temperatureReading);
+        Task<TemperatureSensor> GetTemperature();
         Task Subscribe(ITemperatureSensorGrainObserver observer);
         Task Unsubscribe(ITemperatureSensorGrainObserver observer);
     }
 
     public static class TemperatureReadingConverter
     {
-        public static double ToCelsius(double fahrenheit) => (fahrenheit - 32) * 5 / 9;
+        public static double ToCelsius(this double fahrenheit) => (fahrenheit - 32) * 5 / 9;
 
-        public static double ToFahrenheit(double celsius) => (celsius * 9) / 5 + 32;
+        public static double ToFahrenheit(this double celsius) => (celsius * 9) / 5 + 32;
     }
 }

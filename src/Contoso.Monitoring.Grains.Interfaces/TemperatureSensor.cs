@@ -1,7 +1,7 @@
-namespace Contoso.Monitoring.Grains.Interfaces
+namespace Contoso.Monitoring.Grains
 {
     [GenerateSerializer]
-    public class TemperatureReading
+    public class TemperatureSensor
     {
         [Id(0)]
         public string SensorName { get; set; }

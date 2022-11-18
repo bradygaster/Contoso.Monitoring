@@ -1,4 +1,4 @@
-using Contoso.Monitoring.Grains.Interfaces;
+using Contoso.Monitoring.Grains;
 
 namespace Contoso.Monitoring.Web
 {
@@ -17,7 +17,7 @@ namespace Contoso.Monitoring.Web
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<ITemperatureSensorGrainObserver, TemperatureSensorGrainObserver>();
-            services.AddHostedService<SiloService>();
+            services.AddHostedService<ObserverHostWorker>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

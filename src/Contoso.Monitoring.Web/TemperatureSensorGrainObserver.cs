@@ -1,4 +1,4 @@
-﻿using Contoso.Monitoring.Grains.Interfaces;
+﻿using Contoso.Monitoring.Grains;
 using Microsoft.AspNetCore.SignalR;
 using System.Diagnostics.CodeAnalysis;
 
@@ -24,7 +24,10 @@ namespace Contoso.Monitoring.Web
         public int GetHashCode([DisallowNull] ITemperatureSensorGrainObserver obj)
             => (obj as TemperatureSensorGrainObserver).MachineName.ToLower().GetHashCode();
 
-        public async Task OnTemperatureReadingReceived(TemperatureReading reading)
-            => await _hub.Clients.All.OnTemperatureReadingReceived(reading);
+        public Task OnTemperatureReadingReceived(TemperatureSensor reading)
+        {
+            _hub.Clients.All.OnTemperatureReadingReceived(reading);
+            return Task.CompletedTask;
+        }
     }
 }
