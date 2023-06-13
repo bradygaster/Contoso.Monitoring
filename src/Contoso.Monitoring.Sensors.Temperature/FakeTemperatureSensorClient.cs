@@ -41,7 +41,7 @@ namespace Contoso.Monitoring.Sensors.Temperature
                 SensorName = _randomSensorName,
                 Timestamp = DateTime.Now,
                 Fahrenheit = _currentValue,
-                Celsius = TemperatureReadingConverter.ToCelsius(_currentValue)
+                Celsius = TemperatureSensorConverter.ToCelsius(_currentValue)
             });
         }
 

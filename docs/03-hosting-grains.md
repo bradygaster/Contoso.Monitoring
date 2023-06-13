@@ -18,6 +18,6 @@ In the next few steps you'll add a web app that serves as a client calling Grain
 
 ## Next Steps
 
-Now that you have the Orleans Silo hosted in a .NET Core Generic Host you'll run an ASP.NET Core Blazor app that uses the Silo-hosted grain classes to provide a snapshot of the temperature sensors throughout a monitored building.
+Now that you have the Orleans Silo hosted in a .NET Core Generic Host you'll see how to react to changes in Grain state using Grain Observer classes. 
 
-[Go to Phase 4](04-run-blazor-web-app.md)
+[Go to Phase 4](04-grain-observers.md)

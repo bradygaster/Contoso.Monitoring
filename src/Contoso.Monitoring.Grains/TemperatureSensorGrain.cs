@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Orleans.Runtime;
+using Orleans.Utilities;
 
 namespace Contoso.Monitoring.Grains
 { 
@@ -7,13 +8,14 @@ namespace Contoso.Monitoring.Grains
     {
         private ILogger<TemperatureSensorGrain> _logger;
         private IPersistentState<TemperatureSensorGrainState> _temperatureSensorGrainState;
-        private HashSet<ITemperatureSensorGrainObserver> _observers = new();
+        private ObserverManager<ITemperatureSensorGrainObserver> _observerManager;
 
         public TemperatureSensorGrain(ILogger<TemperatureSensorGrain> logger,
             [PersistentState(nameof(TemperatureSensorGrain))] IPersistentState<TemperatureSensorGrainState> temperatureSensorGrainState)
         {
             _logger = logger;
             _temperatureSensorGrainState = temperatureSensorGrainState;
+            _observerManager = new ObserverManager<ITemperatureSensorGrainObserver>(TimeSpan.FromMinutes(5), _logger);
         }
 
         public override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -36,30 +38,19 @@ namespace Contoso.Monitoring.Grains
             _temperatureSensorGrainState.State.Readings.Add(temperatureReading);
             _logger.LogInformation($"Temperature sensor {temperatureReading.SensorName} currently has {_temperatureSensorGrainState.State.Readings.Count} records.");
 
-            foreach (var observer in _observers)
-            {
-                try
-                { 
-                    observer.OnTemperatureReadingReceived(temperatureReading);
-                }
-                catch (Exception ex)
-                {
-                    _observers.Remove(observer);
-                }
-            }
+            await _observerManager.Notify(o => o.OnTemperatureReadingReceived(temperatureReading));
         }
 
         public Task Subscribe(ITemperatureSensorGrainObserver observer)
         {
-            if (!_observers.Contains(observer))
-                _observers.Add(observer);
+            if (!_observerManager.Contains(observer))
+                _observerManager.Subscribe(observer, observer);
             return Task.CompletedTask;
         }
 
         public Task Unsubscribe(ITemperatureSensorGrainObserver observer)
         {
-            if (_observers.Contains(observer))
-                _observers.Remove(observer);
+            _observerManager.Unsubscribe(observer);
             return Task.CompletedTask;
         }
     }

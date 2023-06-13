@@ -16,10 +16,12 @@ The temperature worker will begin to send simulated temperature readings back to
 
 ## Simulate multiple temperature sensors
 
-Now, start up more terminal instances of the terminal window in the temperature sensor project. As you create more instances of the temperature sensor worker, check the Orleans dashboard at http://localhost:8080 to see the grain classes being created in the silo by each of the temperature client applications connecting to it. 
+Now, start up more terminal instances of the terminal window in the temperature sensor project. As you create more instances of the temperature sensor worker, check the Orleans dashboard at http://localhost:8080 to see the grain classes being created in the silo by each of the temperature client applications connecting to it. As well, if you refresh the Contoso Monitoring web page after you start each temperature sensor, you'll see each appear as an individual chart in the page.
+
+![The temperature page open in a browser.](media/14-browser-full.png)
 
 ---
 
 ## Next Steps
 
-That's the end of the exercise. In the next segment we'll have some Q&A. Thank you for your participation in the tutorial. 
+That's the end of the exercise. Thank you for your participation in the tutorial. 

@@ -11,7 +11,7 @@ You will need the following things on your computer to perform the tutorial. The
 
 OR
 
-1. [Visual Studio 2019 Preview](https://visualstudio.microsoft.com/vs/preview/)
+1. [Visual Studio Preview](https://visualstudio.microsoft.com/vs/preview/)
 
 ---
 

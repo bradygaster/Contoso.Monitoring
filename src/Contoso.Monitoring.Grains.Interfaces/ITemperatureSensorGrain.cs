@@ -8,7 +8,7 @@ namespace Contoso.Monitoring.Grains
         Task Unsubscribe(ITemperatureSensorGrainObserver observer);
     }
 
-    public static class TemperatureReadingConverter
+    public static class TemperatureSensorConverter
     {
         public static double ToCelsius(this double fahrenheit) => (fahrenheit - 32) * 5 / 9;
 
