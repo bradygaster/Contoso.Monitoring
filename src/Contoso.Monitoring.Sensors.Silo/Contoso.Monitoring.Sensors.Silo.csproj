@@ -14,8 +14,15 @@
 	<ItemGroup>
 		<PackageReference Include="microsoft.aspnetcore.signalr" Version="1.1.0" />
 		<PackageReference Include="microsoft.extensions.logging" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Orleans.Server" Version="7.0.0" />
-		<PackageReference Include="OrleansDashboard" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+		<PackageReference Include="Microsoft.Orleans.Server" Version="7.2.2" />
+		<PackageReference Include="OrleansDashboard" Version="7.2.2" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Microsoft.Extensions.Logging" />
+		<Using Include="Orleans.Runtime" />
+		<Using Include="Orleans.Configuration" />
+	</ItemGroup>
+	
 </Project>

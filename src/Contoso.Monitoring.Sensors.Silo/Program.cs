@@ -1,5 +1,3 @@
-using Orleans.Configuration;
-
 await Host.CreateDefaultBuilder(args)
     .UseOrleans(siloBuilder =>
     {

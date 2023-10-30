@@ -8,7 +8,13 @@
 
 	<ItemGroup>
 		<PackageReference Include="microsoft.extensions.logging" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Orleans.Sdk" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Orleans.Sdk" Version="7.2.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Microsoft.Extensions.Logging" />
+		<Using Include="Orleans.Runtime" />
+		<Using Include="Orleans.Utilities" />
 	</ItemGroup>
 
 </Project>

@@ -1,9 +1,5 @@
-using Contoso.Monitoring.Grains;
-using Microsoft.AspNetCore.SignalR;
+namespace Contoso.Monitoring.Web;
 
-namespace Contoso.Monitoring.Web
+public class BuildingMonitorHub : Hub<ITemperatureSensorGrainObserver>
 {
-    public class BuildingMonitorHub : Hub<ITemperatureSensorGrainObserver>
-    {
-    }
 }
