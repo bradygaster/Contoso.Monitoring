@@ -10,7 +10,4 @@ await Host.CreateDefaultBuilder(args)
             .AddMemoryGrainStorageAsDefault()
             .UseLocalhostClustering(siloPort: 11111, gatewayPort: 30000);
 
-        siloBuilder
-            .UseDashboard();
-
     }).RunConsoleAsync();
